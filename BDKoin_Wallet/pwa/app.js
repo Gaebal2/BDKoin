@@ -47,7 +47,7 @@
   let activeWalletId = '';
   let vaultPassword = '';
   const walletBalances = new Map();
-  let token = { symbol: config.cid === TOKEN_CIDS.PSL ? 'PSL' : 'BDK', decimal: 18 };
+  let token = { symbol: config.cid === TOKEN_CIDS.PSL ? 'PSL' : 'BDK', decimal: config.cid === TOKEN_CIDS.PSL ? 0 : 18 };
   let rawBalance = '0';
   let rawSlBalance = '0';
   let selectedAsset = 'BDK';
@@ -264,7 +264,7 @@
 
   function formatBdkBalance(value) {
     const exact = formatDisplayUnits(value, token.decimal);
-    return exact.length <= 22 ? exact : formatCompactUnits(value, token.decimal);
+    return token.symbol === 'PSL' || exact.length <= 22 ? exact : formatCompactUnits(value, token.decimal);
   }
 
   function parseUnits(value, decimals) {
@@ -322,10 +322,11 @@
     return BigInt(text).toString();
   }
 
-  function formatAmountInput(value) {
+  function formatAmountInput(value, decimals = 18) {
     const raw = String(value).replace(/,/g, '');
     if (!/^\d*(\.\d*)?$/.test(raw)) return null;
     if (!raw) return '';
+    if (decimals === 0 && raw.includes('.')) return null;
     const [integer = '', fraction] = raw.split('.');
     const grouped = (integer || '0').replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return fraction === undefined ? grouped : `${grouped}.${fraction}`;
@@ -531,7 +532,7 @@
       || (symbol === 'BDK' && (info?.name !== 'BDKoin' || decimal !== 18))) {
       throw new Error(symbol + ' 메인넷 토큰 정보를 확인할 수 없습니다.');
     }
-    return { symbol, decimal };
+    return { symbol, decimal: symbol === 'PSL' ? 0 : decimal };
   }
 
   async function validateBdkTransfer() {
@@ -568,7 +569,7 @@
     $('historyTitle').textContent = 'SL · ' + token.symbol + ' 거래 이력';
     document.querySelectorAll('.bdk-balance-icon').forEach(icon => {
       icon.hidden = false;
-      icon.src = token.symbol === 'PSL' ? 'images/psl-token-icon.svg' : 'images/bdkoin-brand.png';
+      icon.src = token.symbol === 'PSL' ? 'images/psl-token-icon.svg' : 'images/bdk-token-icon.png';
       icon.alt = `${token.symbol} 아이콘`;
     });
   }
@@ -582,7 +583,7 @@
     catch { return toast('설정을 저장하지 못했습니다.'); }
     config = next;
     tokenRevision++;
-    token = { symbol, decimal: 18 };
+    token = { symbol, decimal: symbol === 'PSL' ? 0 : 18 };
     walletBalances.clear();
     historyRequestId++;
     historyLoading = false;
@@ -942,11 +943,18 @@
     return /timestamp must be greater than \d+ and less than \d+/i.test(rpcError(error));
   }
 
+  function pendingDisplayAmount(item) {
+    if (item.symbol === 'PSL' || item.signed?.transaction?.cid === TOKEN_CIDS.PSL) {
+      return formatDisplayUnits(parseTokenUnits(item.signed.transaction.amount, 0), 0);
+    }
+    return item.displayAmount || '';
+  }
+
   function prepareReplacementTransfer(item) {
     forgetPendingTransfer(item.hash);
     openPanel('sendPanel', item.asset === 'SL' ? 'SL' : 'BDK');
     $('toAddress').value = item.to || '';
-    $('amount').value = formatAmountInput(item.displayAmount || '') || '';
+    $('amount').value = formatAmountInput(pendingDisplayAmount(item), selectedAsset === 'SL' ? 18 : token.decimal) || '';
     $('amount').dataset.previousValue = $('amount').value;
     toast('만료된 거래는 다시 체결되지 않습니다. 내용을 확인한 뒤 새 거래를 전송하세요.');
     refreshHistory(1);
@@ -989,7 +997,7 @@
   }
 
   function historyTokenIcon(symbol) {
-    if (symbol === 'BDK') return 'images/bdk-history-icon.png';
+    if (symbol === 'BDK') return 'images/bdk-token-icon.png';
     if (symbol === 'PSL') return 'images/psl-token-icon.svg';
     return 'images/sl-token-icon.png';
   }
@@ -1023,7 +1031,7 @@
     const value = document.createElement('div');
     value.className = 'history-value';
     const amount = document.createElement('strong');
-    amount.textContent = `-${item.displayAmount} ${item.symbol || item.asset}`;
+    amount.textContent = `-${pendingDisplayAmount(item)} ${item.symbol || item.asset}`;
     const time = document.createElement('small');
     time.textContent = expired ? '유효시간 만료 · 체결 불가' : '네트워크 확인 대기 중';
     value.append(amount, time);
@@ -1297,6 +1305,7 @@
     $('sendTitle').textContent = `${symbol} 보내기`;
     $('receiveTitle').textContent = `${symbol} 받기`;
     $('amountSymbol').textContent = symbol;
+    $('amount').inputMode = symbol === 'PSL' ? 'numeric' : 'decimal';
     $('receiveHelp').textContent = `${symbol}을 받을 수 있는 SASEUL 주소입니다.`;
     $('sendForm').reset();
     delete $('amount').dataset.previousValue;
@@ -1758,7 +1767,7 @@
     finally { button.disabled = false; }
   };
   $('amount').addEventListener('input', (event) => {
-    const formatted = formatAmountInput(event.target.value);
+    const formatted = formatAmountInput(event.target.value, selectedAsset === 'SL' ? 18 : token.decimal);
     if (formatted === null) event.target.value = event.target.dataset.previousValue || '';
     else {
       event.target.value = formatted;
@@ -2187,7 +2196,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk14', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk15', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});

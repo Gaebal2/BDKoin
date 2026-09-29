@@ -1,6 +1,7 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
+PSL은 0보다 큰 정수만 전송할 수 있습니다.|PSL transfers require a positive whole number.
 BDK토큰 지갑 모드입니다.|You are in BDK token wallet mode.
 PSL토큰 지갑 모드입니다.|You are in PSL token wallet mode.
 지갑 모드|Wallet mode
