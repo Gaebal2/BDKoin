@@ -1,7 +1,7 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
-BDKoin Wallet 홈|BDKoin Wallet home
+BDK Wallet 홈|BDK Wallet home
 주요 메뉴|Main navigation
 평화를 담은 지갑, BDKoin|A wallet for peace. BDKoin.
 자산|Assets
