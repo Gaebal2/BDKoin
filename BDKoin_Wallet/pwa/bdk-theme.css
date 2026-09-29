@@ -110,3 +110,13 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #e1
 .amount-input #amountSymbol{position:static;flex:0 0 auto;padding:0;transform:none;line-height:1.4}
 
 .amount-input{padding-right:14px}
+
+/* Compact card with network and edit controls on the same row. */
+.balance-card{min-height:0;grid-template-rows:auto auto auto auto;padding-block:16px}
+.peace-card-heading{gap:6px;letter-spacing:.03em}
+.card-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex:none}
+.balance-card .card-header-actions .network-badge,.card-header-actions .wallet-edit-button{border-radius:9px;min-height:28px;display:inline-flex;align-items:center;padding:5px 6px;font-size:9px;line-height:1.2}
+.card-header-actions .wallet-edit-button{gap:4px;background:var(--status-tint);color:var(--status-color);border-color:var(--status-border)}
+.balance-card .active-assets{padding:10px 0 4px}
+.balance-card .pull-refresh-hint{margin-top:6px}
+@media(max-width:360px){.peace-card-heading{font-size:8px}.balance-card .card-header-actions .network-badge,.card-header-actions .wallet-edit-button{font-size:8px;padding-inline:5px}.card-header-actions{gap:4px}}
