@@ -59,6 +59,6 @@ node scripts/preview-server.cjs
 
 ## 배포
 
-운영 주소는 **https://gaebal2.github.io/BDKoin_Wallet/** 입니다. 소스는 `Gaebal2/BDKoin`, 정적 사이트 배포는 `Gaebal2/gaebal2.github.io`에서 관리합니다. 배포 방법은 상위 폴더의 `DEPLOYMENT.md`를 참고하세요. `pwa/server.js`와 개인키 파일은 사이트에 배포하지 않습니다. 이 폴더 안의 `.github/workflows`는 복사된 독립 저장소용 참고 설정으로, 현재 모노레포에서는 실행되지 않습니다.
+운영 주소는 **https://gaebal2.github.io/BDKoin/BDKoin_Wallet/** 입니다. 소스와 배포 설정은 모두 `Gaebal2/BDKoin`에서 관리합니다. 상위 폴더의 `DEPLOYMENT.md`를 참고하세요. `pwa/server.js`와 개인키는 사이트에 포함하지 않습니다. 실제 배포 설정은 루트 `.github/workflows/deploy-pages.yml`입니다.
 
 로고 재현·설치 아이콘과 생성 프롬프트는 [BRAND-ASSETS.md](BRAND-ASSETS.md)에 기록했습니다. 테마는 `pwa/bdk-theme.css`입니다. 기존 샘플 컨트랙트와 CLI 도구는 복사본으로 보존했으며 지갑 UI와 별개입니다.
