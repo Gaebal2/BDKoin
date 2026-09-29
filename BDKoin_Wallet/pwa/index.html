@@ -26,14 +26,14 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/bdkoin-app-v2.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/bdkoin-app-v2.png">
-  <link rel="stylesheet" href="framing.css?v=bdk5">
-  <link rel="stylesheet" href="styles.css?v=bdk5">
-  <link rel="stylesheet" href="wallets.css?v=bdk5">
-  <link rel="stylesheet" href="install.css?v=bdk5">
-  <link rel="stylesheet" href="history.css?v=bdk5">
-  <link rel="stylesheet" href="overlays.css?v=bdk5">
+  <link rel="stylesheet" href="framing.css?v=bdk6">
+  <link rel="stylesheet" href="styles.css?v=bdk6">
+  <link rel="stylesheet" href="wallets.css?v=bdk6">
+  <link rel="stylesheet" href="install.css?v=bdk6">
+  <link rel="stylesheet" href="history.css?v=bdk6">
+  <link rel="stylesheet" href="overlays.css?v=bdk6">
   <title>BDK Wallet · Art for Peace & Children</title>
-  <link rel="stylesheet" href="bdk-theme.css?v=bdk5">
+  <link rel="stylesheet" href="bdk-theme.css?v=bdk6">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -86,10 +86,11 @@
       </section>
 
       <section id="wallet" class="dashboard hidden">
+        <p class="pull-refresh-hint">↓ 아래로 당겼다 놓으면 모든 지갑의 잔액이 새로고침됩니다.</p>
         <section class="balance-card" aria-labelledby="portfolioLabel">
-          <div class="peace-card-heading"><span>PEACE BALANCE</span><button id="balanceRefresh" class="icon-button" type="button" aria-label="잔액 새로고침">↻</button></div>
+          <div class="peace-card-heading"><span>PEACE BALANCE</span></div>
           <div class="active-assets">
-            <div class="active-primary-balance"><div><img class="hero-balance-icon bdk-balance-icon" src="images/bdkoin-brand.png" alt=""><strong id="bdkHeroBalance">—</strong><span id="bdkHeroSymbol" class="hero-balance-symbol">BDK</span></div><button id="balanceDetails" class="balance-caption" type="button">BDKoin Peace Token <span>↗</span></button></div>
+            <div class="active-primary-balance"><div><img class="hero-balance-icon bdk-balance-icon" src="images/bdkoin-brand.png" alt=""><strong id="bdkHeroBalance">—</strong><span id="bdkHeroSymbol" class="hero-balance-symbol">BDK</span></div><div class="balance-caption"><span class="token-caption">BDKoin Peace Token</span><button id="balanceDetails" class="balance-details-button" type="button">상세</button></div></div>
           </div>
         </section>
         <div class="card-top wallet-context">
@@ -104,7 +105,6 @@
             <button id="activeSlSend" type="button"><span>↗</span>SL 보내기</button>
             <button id="activeSlReceive" type="button"><span>↙</span>SL 받기</button>
           </div></details>
-        <p class="pull-refresh-hint">↓ 아래로 당겼다 놓으면 모든 지갑의 잔액이 새로고침됩니다.</p>
         <aside class="security-note"><span>✓</span><div><strong>로컬 암호화 보관</strong><p>개인키는 AES-GCM으로 암호화되어 이 기기에만 저장됩니다.</p></div></aside>
         <section class="history-section" aria-labelledby="historyTitle">
           <div class="section-heading"><div><p class="eyebrow">HISTORY</p><h2 id="historyTitle">SL · BDK 거래 이력</h2></div><span id="historyPageBadge">1</span></div>
@@ -361,8 +361,8 @@
   <script src="vendor/axios.min.js"></script>
   <script src="vendor/qrcode.min.js"></script>
   <script src="vendor/saseul.min.js"></script>
-  <script src="backup.js?v=bdk5"></script>
-  <script src="i18n.js?v=bdk5"></script>
-  <script src="app.js?v=bdk5"></script>
+  <script src="backup.js?v=bdk6"></script>
+  <script src="i18n.js?v=bdk6"></script>
+  <script src="app.js?v=bdk6"></script>
 </body>
 </html>

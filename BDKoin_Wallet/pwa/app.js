@@ -1441,7 +1441,6 @@
     openPanel('receivePanel', 'BDK');
   };
   $('navSettings').onclick = () => $('settingsBtn').click();
-  $('balanceRefresh').onclick = () => refresh();
   $('balanceDetails').onclick = () => showAlert(formatDisplayUnits(rawBalance, 18) + ' BDK', '정확한 BDK 잔액');
 
   $('activeBdkSend').onclick = () => openPanel('sendPanel', 'BDK');
@@ -2043,7 +2042,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk5', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk6', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});

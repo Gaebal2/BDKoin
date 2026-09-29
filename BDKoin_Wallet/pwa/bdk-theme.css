@@ -61,3 +61,18 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #e1
 #unlock .unlock-orb svg{width:20px;height:20px;transform:none}
 #unlock .unlock-heading h1{font-size:20px;line-height:1.3;margin:0}
 #unlock .auth-form{margin-top:0}
+
+/* Asset details and aligned identity/security groups. */
+.balance-caption{cursor:default;align-items:center}
+.balance-caption .token-caption{font-size:11px;color:#9a958b}
+.balance-details-button{padding:5px 10px;min-height:28px;border:1px solid #695336;border-radius:8px;background:#302616;color:#e1c68e;font:inherit;font-size:10px;cursor:pointer}
+.balance-details-button:disabled{opacity:.45;cursor:default}
+.wallet-context .active-wallet-name-row{align-items:center;justify-content:center;flex-wrap:nowrap;gap:8px}
+.wallet-context .active-wallet-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4}
+.wallet-context .active-wallet-address-row{flex:none;align-items:center;gap:6px}
+.wallet-context .active-wallet-heading{text-align:center}
+.security-note{display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 4px}
+.security-note>span{display:grid;place-items:center;width:24px;height:24px;flex:0 0 24px;font-size:15px;line-height:1}
+.security-note>div{min-width:0}
+.security-note strong{display:block;font-size:11px;line-height:1.5}
+.security-note p{font-size:10px;line-height:1.6;margin:3px 0 0}
