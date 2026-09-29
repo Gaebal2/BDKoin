@@ -43,3 +43,9 @@ dialog.sheet,dialog[open]{background:linear-gradient(145deg,#1b1813,#0e0d0b);col
 .transfer-success-mark{color:var(--success);background:#12271e}
 .transfer-success-dialog.processing .transfer-success-mark{color:var(--warning);background:#292311}
 .transfer-success-dialog.failed .transfer-success-mark{color:var(--danger);background:#2b1719}
+
+/* Private-key controls follow the black and gold palette. */
+#privateKeyDialog .private-key-box button{background:#302616;color:#e1c68e;border:1px solid #695336}
+#privateKeyDialog .private-key-box button:hover{background:#40331f}
+#privateKeyDialog .private-key-box button:focus-visible{outline:2px solid #e1c68e;outline-offset:3px}
+#privateKeyDialog .private-key-entry{border-bottom:0}
