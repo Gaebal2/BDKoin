@@ -316,10 +316,12 @@
   }
 
   function parseTokenUnits(value, decimals) {
-    // BDK contract balances and Send amounts are integer base units, not display units.
-    const text = String(value ?? '0').trim();
-    if (!/^\d+$/.test(text)) throw new Error('토큰 잔액 형식이 올바르지 않습니다.');
-    return BigInt(text).toString();
+    // Contract balances are integer base units; never scale BDK a second time.
+    if (value == null || (typeof value === 'number' && !Number.isSafeInteger(value))) throw new Error('토큰 잔액 형식이 올바르지 않습니다.');
+    const text = String(value).trim();
+    const pattern = decimals === 0 ? /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.0+)?$/ : /^\d+$/;
+    if (!pattern.test(text)) throw new Error('토큰 잔액 형식이 올바르지 않습니다.');
+    return BigInt(text.replace(/,/g, '').split('.')[0]).toString();
   }
 
   function formatAmountInput(value, decimals = 18) {
@@ -527,8 +529,8 @@
   }
 
   function verifiedBdkInfo(info, symbol = 'BDK') {
-    const decimal = Number(info?.decimal);
-    if (info?.symbol !== symbol || info?.decimal == null || !Number.isInteger(decimal) || decimal < 0 || decimal > 18
+    const decimal = Number(info?.decimal ?? (symbol === 'PSL' ? 0 : NaN));
+    if (info?.symbol !== symbol || !Number.isInteger(decimal) || decimal < 0 || decimal > 18
       || (symbol === 'BDK' && (info?.name !== 'BDKoin' || decimal !== 18))) {
       throw new Error(symbol + ' 메인넷 토큰 정보를 확인할 수 없습니다.');
     }
@@ -674,8 +676,8 @@
         event.stopPropagation();
         copy(wallet.id);
       };
-      details.querySelector('.wallet-balances strong').textContent = balances.loading ? '조회 중' : balances.bdkError || balances.error ? '연결 오류' : `${formatBdkBalance(balances.bdk)} ${token.symbol}`;
-      details.querySelector('.wallet-balances small').textContent = balances.loading ? '—' : `${formatCompactUnits(balances.sl, 18, 9)} SL`;
+      details.querySelector('.wallet-balances strong').textContent = balances.loading ? '조회 중' : balances.bdkError || balances.error ? (typeof balances.bdkError === 'string' && balances.bdkError ? balances.bdkError : '조회 요청 실패') : `${formatBdkBalance(balances.bdk)} ${token.symbol}`;
+      details.querySelector('.wallet-balances small').textContent = balances.loading ? '—' : balances.slError || `${formatCompactUnits(balances.sl, 18, 9)} SL`;
       const selectButton = document.createElement('button');
       selectButton.type = 'button';
       selectButton.className = 'wallet-choose-button';
@@ -770,7 +772,7 @@
   function updateActiveBalances(balances) {
     rawSlBalance = balances.sl;
     rawBalance = balances.bdk;
-    const slDisplay = balances.error ? '연결 오류' : formatCompactUnits(balances.sl, 18, 9);
+    const slDisplay = balances.slError || (balances.error ? '조회 요청 실패' : formatCompactUnits(balances.sl, 18, 9));
     $('slHeroBalance').textContent = slDisplay;
     $('slHeroBalance').classList.toggle('long-balance', slDisplay.length > 12);
     $('slHeroBalance').title = `${formatDisplayUnits(balances.sl, 18)} SL`;
@@ -785,45 +787,70 @@
       $('bdkHeroBalance').append(part);
     }
     $('bdkHeroBalance').classList.toggle('long-balance', bdkDisplay.length > 12);
-    $('bdkHeroBalance').title = $('balanceDetails').disabled ? '' : `${formatDisplayUnits(balances.bdk, token.decimal)} ${token.symbol}`;
+    $('bdkHeroBalance').title = $('balanceDetails').disabled ? (typeof balances.bdkError === 'string' ? balances.bdkError : '') : `${formatDisplayUnits(balances.bdk, token.decimal)} ${token.symbol}`;
     $('bdkHeroSymbol').textContent = token.symbol;
+    $('tokenBalanceError').textContent = balances.loading ? '' : (typeof balances.bdkError === 'string' ? balances.bdkError : '');
+  }
+
+  function balanceRequestError(error) {
+    const message = rpcError(error);
+    return /timeout|timed out|ETIMEDOUT|ECONNABORTED|시간 초과/i.test(message) ? '조회 시간 초과' : '조회 요청 실패';
+  }
+
+  async function requestBalanceData(request, key) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const result = await SASEUL.Rpc.request(SASEUL.Rpc.signedRequest(request, key));
+        if (result?.code === 200) return result;
+        // Retry transient node errors only, never a transfer or a contract rejection.
+        if (attempt === 0 && (result?.code === 429 || result?.code >= 500)) continue;
+        return result;
+      } catch (error) {
+        if (attempt === 1) throw error;
+      }
+    }
   }
 
   async function fetchWalletBalance(wallet) {
     const revision = tokenRevision;
     const walletAddressValue = walletAddress(wallet);
-    const slRequest = SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ type: 'GetBalance', address: walletAddressValue }, wallet.privateKey));
-    const bdkRequest = (async () => {
-      const cid = contractId();
-      return Promise.all([
-        SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ cid, type: 'GetInfo' }, wallet.privateKey)),
-        SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ cid, type: 'GetBalance', address: walletAddressValue }, wallet.privateKey))
-      ]);
-    })();
-    const [slState, bdkState] = await Promise.allSettled([slRequest, bdkRequest]);
+    const cid = contractId();
+    const symbol = token.symbol;
+    const [slState, infoState, balanceStateResult] = await Promise.allSettled([
+      requestBalanceData({ type: 'GetBalance', address: walletAddressValue }, wallet.privateKey),
+      requestBalanceData({ cid, type: 'GetInfo' }, wallet.privateKey),
+      requestBalanceData({ cid, type: 'GetBalance', address: walletAddressValue }, wallet.privateKey)
+    ]);
     if (revision !== tokenRevision) return false;
     let sl = '0';
     let bdk = '0';
-    let bdkError = true;
+    let bdkError = '';
+    let slError = '';
     let online = false;
-    if (slState.status === 'fulfilled' && slState.value.code === 200) {
+    if (slState.status === 'fulfilled' && slState.value?.code === 200) {
       try {
+        if (slState.value.data?.balance == null) throw new Error('Missing balance');
         sl = normalizeBalance(slState.value.data.balance, 18);
         online = true;
-      } catch { /* keep BDK and history available if SL formatting is unexpected */ }
+      } catch { slError = '잔액 형식 오류'; }
+    } else slError = balanceRequestError(slState.reason || slState.value);
+    if (infoState.status === 'rejected' || infoState.value?.code !== 200) {
+      bdkError = balanceRequestError(infoState.reason || infoState.value);
+    } else {
+      try { token = verifiedBdkInfo(infoState.value.data, symbol); }
+      catch { bdkError = '토큰 정보 오류'; }
     }
-    if (bdkState.status === 'fulfilled') {
-      const [infoResult, balanceResult] = bdkState.value;
-      if (infoResult.code === 200 && balanceResult.code === 200) {
+    if (!bdkError) {
+      if (balanceStateResult.status === 'rejected' || balanceStateResult.value?.code !== 200) {
+        bdkError = balanceRequestError(balanceStateResult.reason || balanceStateResult.value);
+      } else {
         try {
-          token = verifiedBdkInfo(infoResult.data, token.symbol);
-          bdk = parseTokenUnits(balanceResult.data.balance, token.decimal);
-          bdkError = false;
+          bdk = parseTokenUnits(balanceStateResult.value.data?.balance, token.decimal);
           online = true;
-        } catch { /* keep SL and history available if token formatting is unexpected */ }
+        } catch { bdkError = '잔액 형식 오류'; } // keep SL and history available
       }
     }
-    walletBalances.set(wallet.id, { sl, bdk, bdkError, loading: false, error: !online });
+    walletBalances.set(wallet.id, { sl, bdk, bdkError, slError, loading: false, error: !online });
     return online;
   }
 
@@ -2196,7 +2223,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk15', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk16', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});

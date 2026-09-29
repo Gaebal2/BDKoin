@@ -1,6 +1,10 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
+조회 시간 초과|Balance request timed out
+조회 요청 실패|Balance request failed
+잔액 형식 오류|Invalid balance format
+토큰 정보 오류|Invalid token information
 PSL은 0보다 큰 정수만 전송할 수 있습니다.|PSL transfers require a positive whole number.
 BDK토큰 지갑 모드입니다.|You are in BDK token wallet mode.
 PSL토큰 지갑 모드입니다.|You are in PSL token wallet mode.

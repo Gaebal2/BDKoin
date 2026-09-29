@@ -96,7 +96,7 @@ function installHarness(agent, standalone = false) {
     SASEUL:{Rpc:{signedRequest:x=>x}},
     walletBalances:new Map()
   });
-  vm.runInContext(extract('fetchWalletBalance'), stale);
+  vm.runInContext(extract('requestBalanceData') + extract('fetchWalletBalance'), stale);
   // Use one deferred RPC promise for all requests.
   let resolveRpc;
   const rpc = new Promise(resolve => resolveRpc=resolve);
@@ -106,6 +106,39 @@ function installHarness(agent, standalone = false) {
   resolveRpc({code:200,data:{balance:'123',symbol:'BDK',decimal:18}});
   assert.equal(await pending, false);
   assert.equal(stale.walletBalances.size,0,'Old CID responses cannot populate new token balances');
+  for (const value of ['1000', '1000.0', '1,000', '1,000.000']) assert.equal(c.parseTokenUnits(value, 0), '1000');
+  for (const value of ['1000.5', '1,00', '1e3', '', null, undefined, 9007199254740992]) assert.throws(() => c.parseTokenUnits(value, 0));
+  assert.equal(c.parseTokenUnits('123456789012345678901234567890', 0), '123456789012345678901234567890');
+  assert.equal(c.verifiedBdkInfo({symbol:'PSL'}, 'PSL').decimal, 0);
+  assert.throws(() => c.verifiedBdkInfo({symbol:'BDK',name:'BDKoin'}, 'BDK'));
+  async function balanceHarness(mode) {
+    let attempts = 0;
+    const context = vm.createContext({
+      tokenRevision:0, token:{symbol:'PSL',decimal:0}, walletAddress:()=> 'address', contractId:()=> 'psl',
+      walletBalances:new Map(),
+      SASEUL:{Rpc:{signedRequest:x=>x,request:async request=>{
+        if (!request.cid) return {code:200,data:{balance:'0'}};
+        if (request.type==='GetInfo') return {code:200,data:{symbol:mode==='metadata'?'OTHER':'PSL'}};
+        attempts++;
+        if (mode==='timeout' || (mode==='retry' && attempts===1)) throw Error('request timeout');
+        if (mode==='server') return {code:503};
+        return {code:200,data:mode==='missing'?{}:{balance:mode==='fraction'?'1.5':'1,000.0'}};
+      }}}
+    });
+    for(const name of ['rpcError','balanceRequestError','requestBalanceData','verifiedBdkInfo','formatUnits','parseUnits','normalizeBalance','parseTokenUnits','fetchWalletBalance']) vm.runInContext(extract(name),context);
+    await context.fetchWalletBalance({id:'wallet',privateKey:'test'});
+    return {result:context.walletBalances.get('wallet'),attempts};
+  }
+  const recovered = await balanceHarness('retry');
+  assert.equal(recovered.attempts,2);
+  assert.equal(recovered.result.bdk,'1000');
+  assert.equal(recovered.result.bdkError,'');
+  for(const [mode,message] of [['timeout','조회 시간 초과'],['server','조회 요청 실패'],['metadata','토큰 정보 오류'],['fraction','잔액 형식 오류'],['missing','잔액 형식 오류']]) {
+    const {result,attempts}=await balanceHarness(mode);
+    assert.equal(result.bdkError,message,mode);
+    assert.equal(result.slError,'','SL remains available independently');
+    if(mode==='timeout'||mode==='server') assert.equal(attempts,2,'Retry is bounded');
+  }
   function settingsHarness() {
     const elements = {};
     const events = {};
