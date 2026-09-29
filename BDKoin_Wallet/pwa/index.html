@@ -26,14 +26,14 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/bdkoin-app-v2.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/bdkoin-app-v2.png">
-  <link rel="stylesheet" href="framing.css?v=bdk7">
-  <link rel="stylesheet" href="styles.css?v=bdk7">
-  <link rel="stylesheet" href="wallets.css?v=bdk7">
-  <link rel="stylesheet" href="install.css?v=bdk7">
-  <link rel="stylesheet" href="history.css?v=bdk7">
-  <link rel="stylesheet" href="overlays.css?v=bdk7">
+  <link rel="stylesheet" href="framing.css?v=bdk8">
+  <link rel="stylesheet" href="styles.css?v=bdk8">
+  <link rel="stylesheet" href="wallets.css?v=bdk8">
+  <link rel="stylesheet" href="install.css?v=bdk8">
+  <link rel="stylesheet" href="history.css?v=bdk8">
+  <link rel="stylesheet" href="overlays.css?v=bdk8">
   <title>BDK Wallet · Art for Peace & Children</title>
-  <link rel="stylesheet" href="bdk-theme.css?v=bdk7">
+  <link rel="stylesheet" href="bdk-theme.css?v=bdk8">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -88,15 +88,18 @@
       <section id="wallet" class="dashboard hidden">
         <section class="balance-card" aria-labelledby="portfolioLabel">
           <div class="peace-card-heading"><span id="portfolioLabel">PEACE BALANCE</span><span id="networkBadge" class="network-badge">SASEUL 메인넷</span></div>
+          <div class="wallet-context card-wallet-context">
+            <strong id="activeWalletName" class="active-wallet-name">지갑 1</strong>
+            <code id="accountAddress"></code>
+            <button id="copyAccount" type="button">복사</button>
+            <button id="balanceDetails" class="balance-details-button" type="button">상세</button>
+            <button id="editWalletsBtn" class="wallet-edit-button backup-missing" type="button"><span id="editWalletsStatusIcon" class="backup-status-icon" role="img" aria-label="경고">!</span><span>지갑 편집</span></button>
+          </div>
           <div class="active-assets">
-            <div class="active-primary-balance"><div><img class="hero-balance-icon bdk-balance-icon" src="images/bdkoin-brand.png" alt=""><strong id="bdkHeroBalance">—</strong><span id="bdkHeroSymbol" class="hero-balance-symbol">BDK</span></div><div class="balance-caption"><span class="token-caption">BDKoin Peace Token</span><button id="balanceDetails" class="balance-details-button" type="button">상세</button></div></div>
+            <div class="active-primary-balance"><div><img class="hero-balance-icon bdk-balance-icon" src="images/bdkoin-brand.png" alt=""><strong id="bdkHeroBalance">—</strong><span id="bdkHeroSymbol" class="hero-balance-symbol">BDK</span></div></div>
           </div>
           <p class="pull-refresh-hint">↓ 아래로 당겼다 놓으면 모든 지갑의 잔액이 새로고침됩니다.</p>
         </section>
-        <div class="card-top wallet-context">
-          <div class="active-wallet-identity"><div class="active-wallet-name-row"><strong id="activeWalletName" class="active-wallet-name">지갑 1</strong><span class="active-wallet-address-row"><code id="accountAddress"></code><button id="copyAccount" type="button">복사</button></span></div></div>
-          <button id="editWalletsBtn" class="wallet-edit-button backup-missing" type="button"><span id="editWalletsStatusIcon" class="backup-status-icon" role="img" aria-label="경고">!</span><span>지갑 편집</span></button>
-        </div>
           <details class="fee-tools"><summary>수수료 자산 관리 <span>SL</span></summary>
             <div class="active-secondary-balance"><span>SL 메인넷 잔액</span><strong><img class="hero-balance-icon sl-balance-icon" src="images/sl-token-icon.png" alt=""><b id="slHeroBalance">—</b><span class="hero-balance-symbol">SL</span></strong></div>
             <div class="active-card-actions" aria-label="활성 지갑 작업">
@@ -361,8 +364,8 @@
   <script src="vendor/axios.min.js"></script>
   <script src="vendor/qrcode.min.js"></script>
   <script src="vendor/saseul.min.js"></script>
-  <script src="backup.js?v=bdk7"></script>
-  <script src="i18n.js?v=bdk7"></script>
-  <script src="app.js?v=bdk7"></script>
+  <script src="backup.js?v=bdk8"></script>
+  <script src="i18n.js?v=bdk8"></script>
+  <script src="app.js?v=bdk8"></script>
 </body>
 </html>
