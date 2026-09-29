@@ -86,7 +86,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #e1
 .wallet-context .active-wallet-name-row{justify-content:flex-start}
 .active-primary-balance{--balance-size:52px}
 .active-primary-balance:has(#bdkHeroBalance.long-balance){--balance-size:32px}
-.active-primary-balance>div:first-child{justify-content:flex-end;gap:7px}
+.active-primary-balance>div:first-child{justify-content:flex-end;align-items:center;gap:7px}
 .active-primary-balance #bdkHeroBalance{font-size:var(--balance-size);font-weight:700;text-align:right;justify-content:flex-end;min-width:0}
 .active-primary-balance #bdkHeroBalance .balance-fraction{font-weight:600}
 .active-primary-balance .hero-balance-symbol{margin-left:0;font-weight:600}
