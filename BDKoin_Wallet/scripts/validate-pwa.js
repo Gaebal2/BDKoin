@@ -4,7 +4,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const pwa = path.join(root, 'pwa');
-const required = ['index.html', 'framing.css', 'styles.css', 'wallets.css', 'install.css', 'history.css', 'overlays.css', 'bdk-theme.css', 'app.js', 'sw.js', 'manifest.webmanifest', 'icons/icon.svg', 'images/bdkoin-brand.png', 'images/bdk-token-icon.svg', 'images/sl-token-icon.png', 'vendor/qrcode.min.js'];
+const required = ['index.html', 'framing.css', 'styles.css', 'wallets.css', 'install.css', 'history.css', 'overlays.css', 'bdk-theme.css', 'app.js', 'sw.js', 'manifest.webmanifest', 'icons/icon.svg', 'images/bdkoin-brand.png', 'images/bdkoin-brand.png', 'images/sl-token-icon.png', 'vendor/qrcode.min.js'];
 const failures = [];
 
 for (const file of required) {
@@ -65,16 +65,16 @@ if (!appSource.includes('removeWallet') || !appSource.includes('syncDialogScroll
 if (!appSource.includes('formatDisplayUnits') || !appSource.includes('submitTransaction') || !html.includes('id="transferSuccessDialog"')) failures.push('Exact grouped amounts or resilient transfer completion UI is missing');
 if (!appSource.includes('Promise.any(requests)') || !appSource.includes('result.data ?? {}') || !appSource.includes("'받는 주소' : '보낸 주소'")) failures.push('Resilient empty history handling or counterparty labels are missing');
 if (!html.includes('id="transferReviewDialog"') || !appSource.includes('confirmTransfer') || !appSource.includes('formatAmountInput') || !appSource.includes('const transactionAmount = amount;') || !appSource.includes('parseTokenUnits(balanceResult.data.balance, token.decimal)')) failures.push('Custom transfer review, grouped input, or BDK contract base units are missing');
-if (!html.includes('app.js?v=bdk1') || !appSource.includes("sw.js?v=bdk1") || !swSource.includes("cache: 'reload'")) failures.push('Versioned app assets or forced service-worker refresh are missing');
+if (!html.includes('app.js?v=bdk2') || !appSource.includes("sw.js?v=bdk2") || !swSource.includes("cache: 'reload'")) failures.push('Versioned app assets or forced service-worker refresh are missing');
 if (!html.includes('id="appAlertDialog"') || !appSource.includes('isInvalidBdkTransferAmount') || !appSource.includes('BDK는 소수점 18자리까지 전송할 수 있습니다.')) failures.push('BDK decimal validation is missing');
-if (!html.includes('id="transferReviewFee"') || !appSource.includes('estimatedFee') || !appSource.includes('history-fee') || !appSource.includes("'bdk-token-icon.svg' : 'sl-token-icon.png'")) failures.push('Transfer fee preview or token-aware history is missing');
+if (!html.includes('id="transferReviewFee"') || !appSource.includes('estimatedFee') || !appSource.includes('history-fee') || !appSource.includes("'bdkoin-brand.png' : 'sl-token-icon.png'")) failures.push('Transfer fee preview or token-aware history is missing');
 if (!html.includes('id="dangerConfirmDialog"') || !appSource.includes('confirmDanger') || appSource.includes('if (!confirm(`${wallet.name}')) failures.push('Custom wallet deletion confirmation is missing');
 if (!html.includes('id="uninstallGuideDialog"') || !html.includes('id="uninstallGuideBackup"') || !appSource.includes("$('uninstallGuideDelete').onclick")) failures.push('App removal and storage guidance is missing');
 if (!appSource.includes('const closeUninstallGuide') || !appSource.includes('formatDisplayUnits(balances.bdk, token.decimal)')) failures.push('Settings return flow or exact active BDK display is missing');
 if (!html.includes('class="orb small unlock-orb"') || !html.includes('class="active-wallet-name-row"') || !html.includes('class="hero-balance-icon bdk-balance-icon"')) failures.push('Unlock icon or active wallet layout refinement is missing');
 if (!html.includes('id="textInputDialog"') || !html.includes('id="backupConfirmDialog"') || !html.includes('id="privateKeyDialog"') || !appSource.includes('requestTextInput') || !appSource.includes('confirmPrivateKeyBackup')) failures.push('Custom rename or private-key backup dialogs are missing');
 if (!appSource.includes("DEFAULT_BDK_CID = 'fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0'")) failures.push('Default BDK CID is missing');
-if (!html.includes('images/bdk-token-icon.svg') || !swSource.includes('images/bdk-token-icon.svg')) failures.push('Aligned vector BDK icon is missing');
+if (!html.includes('images/bdkoin-brand.png') || !swSource.includes('images/bdkoin-brand.png')) failures.push('Aligned vector BDK icon is missing');
 if (!appSource.includes('event.stopPropagation()') || !walletsSource.includes('-webkit-tap-highlight-color: transparent')) failures.push('Wallet copy tap target isolation is missing');
 if (/\b(?:window\.)?(?:alert|confirm|prompt)\s*\(/.test(appSource.replace(/promptEvent\.prompt\s*\(/g, ''))) failures.push('Browser-native app dialogs are still in use');
 if (!appSource.includes('parseTokenUnits') || !appSource.includes('keep SL and history available')) failures.push('Token balance parsing or refresh isolation is missing');

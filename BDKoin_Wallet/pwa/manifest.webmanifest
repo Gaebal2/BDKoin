@@ -22,16 +22,10 @@
   ],
   "icons": [
     {
-      "src": "icons/bdkoin-app.png",
+      "src": "icons/bdkoin-app-v2.png",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -41,7 +35,7 @@
       "url": "./",
       "icons": [
         {
-          "src": "icons/bdkoin-app.png",
+          "src": "icons/bdkoin-app-v2.png",
           "sizes": "1254x1254",
           "type": "image/png",
           "purpose": "any"

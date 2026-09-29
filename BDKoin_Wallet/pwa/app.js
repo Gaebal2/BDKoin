@@ -1039,7 +1039,7 @@
         const icon = document.createElement('span');
         icon.className = 'history-icon';
         const tokenIcon = document.createElement('img');
-        tokenIcon.src = `images/${isBdk ? 'bdk-token-icon.svg' : 'sl-token-icon.png'}`;
+        tokenIcon.src = `images/${isBdk ? 'bdkoin-brand.png' : 'sl-token-icon.png'}`;
         tokenIcon.alt = `${symbol} 아이콘`;
         icon.append(tokenIcon);
         const details = document.createElement('div');
@@ -2043,7 +2043,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk1', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk2', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});
