@@ -566,7 +566,11 @@
     $('activeBdkSend').textContent = '↗ ' + token.symbol + ' 보내기';
     $('activeBdkReceive').textContent = '↙ ' + token.symbol + ' 받기';
     $('historyTitle').textContent = 'SL · ' + token.symbol + ' 거래 이력';
-    document.querySelectorAll('.bdk-balance-icon').forEach(icon => { icon.hidden = token.symbol !== 'BDK'; });
+    document.querySelectorAll('.bdk-balance-icon').forEach(icon => {
+      icon.hidden = false;
+      icon.src = token.symbol === 'PSL' ? 'images/psl-token-icon.svg' : 'images/bdkoin-brand.png';
+      icon.alt = `${token.symbol} 아이콘`;
+    });
   }
 
   function selectToken(symbol) {
@@ -984,13 +988,22 @@
     }
   }
 
+  function historyTokenIcon(symbol) {
+    if (symbol === 'BDK') return 'images/bdk-history-icon.png';
+    if (symbol === 'PSL') return 'images/psl-token-icon.svg';
+    return 'images/sl-token-icon.png';
+  }
+
   function renderPendingTransfer(container, item) {
     const row = document.createElement('article');
     const expired = item.status === 'expired';
     row.className = `history-row sent pending-transfer${expired ? ' expired' : ''}`;
     const icon = document.createElement('span');
     icon.className = 'history-icon';
-    icon.textContent = expired ? '!' : '…';
+    const tokenIcon = document.createElement('img');
+    tokenIcon.src = historyTokenIcon(item.symbol || item.asset);
+    tokenIcon.alt = `${item.symbol || item.asset} 아이콘`;
+    icon.append(tokenIcon);
     const details = document.createElement('div');
     details.className = 'history-details';
     const title = document.createElement('strong');
@@ -1103,10 +1116,9 @@
         const icon = document.createElement('span');
         icon.className = 'history-icon';
         const tokenIcon = document.createElement('img');
-        tokenIcon.src = `images/${isBdk ? 'bdkoin-brand.png' : 'sl-token-icon.png'}`;
+        tokenIcon.src = historyTokenIcon(symbol);
         tokenIcon.alt = `${symbol} 아이콘`;
-        if (isBdk && symbol === 'PSL') icon.textContent = 'PSL';
-        else icon.append(tokenIcon);
+        icon.append(tokenIcon);
         const details = document.createElement('div');
         details.className = 'history-details';
         const title = document.createElement('strong');
@@ -1492,12 +1504,43 @@
     } finally { setLoading($('unlockBtn'), false, '잠금 해제'); }
   };
 
+  let settingsEntryCid = null;
+  let settingsHistoryOpen = false;
+
+  function finishSettings() {
+    const changed = settingsEntryCid !== null && settingsEntryCid !== config.cid;
+    settingsEntryCid = null;
+    $('settingsDialog').close();
+    if ($('uninstallGuideDialog').open) $('uninstallGuideDialog').close();
+    if (changed) showAlert(`${token.symbol}토큰 지갑 모드입니다.`, '지갑 모드');
+  }
+
+  function closeSettings() {
+    if (settingsHistoryOpen && history.state?.walletSettings) history.back();
+    else finishSettings();
+  }
+
+  window.addEventListener('popstate', () => {
+    if (!settingsHistoryOpen) return;
+    settingsHistoryOpen = false;
+    finishSettings();
+  });
+
   $('settingsBtn').onclick = () => {
+    if (settingsEntryCid === null) settingsEntryCid = config.cid;
+    if (!settingsHistoryOpen) {
+      history.pushState({ ...history.state, walletSettings: true }, '');
+      settingsHistoryOpen = true;
+    }
     $('endpoint').value = config.endpoint;
     $('cid').value = config.cid;
     $('settingsDialog').showModal();
   };
-  $('settingsClose').onclick = () => $('settingsDialog').close();
+  $('settingsClose').onclick = closeSettings;
+  $('settingsDialog').addEventListener('cancel', event => {
+    event.preventDefault();
+    closeSettings();
+  });
   $('uninstallGuideBtn').onclick = () => {
     $('settingsDialog').close();
     $('uninstallGuideDialog').showModal();
@@ -2144,7 +2187,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk13', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk14', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});

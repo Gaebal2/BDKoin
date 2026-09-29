@@ -93,5 +93,45 @@ function installHarness(agent, standalone = false) {
   resolveRpc({code:200,data:{balance:'123',symbol:'BDK',decimal:18}});
   assert.equal(await pending, false);
   assert.equal(stale.walletBalances.size,0,'Old CID responses cannot populate new token balances');
+  function settingsHarness() {
+    const elements = {};
+    const events = {};
+    const alerts = [];
+    let backCount = 0;
+    const settings = vm.createContext({
+      config: {cid:'bdk',endpoint:'https://example.com'}, token:{symbol:'BDK'},
+      history: {state:null, pushState(state) { this.state=state; }, back() { backCount++; this.state=null; events.popstate(); }},
+      window:{addEventListener:(name,fn)=>events[name]=fn},
+      $:id=>elements[id] ||= {open:false,showModal(){this.open=true;},close(){this.open=false;},addEventListener(name,fn){this[name]=fn;}},
+      showAlert:message=>alerts.push(message)
+    });
+    vm.runInContext(source.slice(source.indexOf('  let settingsEntryCid = null;'),source.indexOf("  $('uninstallGuideBtn').onclick")),settings);
+    return {settings,elements,events,alerts,get backCount(){return backCount;}};
+  }
+  for(const method of ['x','back','cancel']) {
+    const h=settingsHarness();
+    h.elements.settingsBtn.onclick();
+    h.settings.config.cid='psl'; h.settings.token.symbol='PSL';
+    if(method==='x') h.elements.settingsClose.onclick();
+    if(method==='back') h.settings.history.back();
+    if(method==='cancel') h.elements.settingsDialog.cancel({preventDefault(){}});
+    assert.deepEqual(h.alerts,['PSL토큰 지갑 모드입니다.'],method+' shows the selected mode exactly once');
+    assert.equal(h.elements.settingsDialog.open,false);
+    assert.equal(h.backCount,1);
+  }
+  const unchanged=settingsHarness();
+  unchanged.elements.settingsBtn.onclick();
+  unchanged.elements.settingsClose.onclick();
+  assert.equal(unchanged.alerts.length,0,'Closing unchanged settings is silent');
+  const returned=settingsHarness();
+  returned.elements.settingsBtn.onclick();
+  returned.settings.config.cid='psl'; returned.settings.config.cid='bdk';
+  returned.elements.settingsClose.onclick();
+  assert.equal(returned.alerts.length,0,'Returning to the original token is silent');
+  vm.runInContext(extract('historyTokenIcon'),c);
+  for (const symbol of ['BDK','PSL','SL']) assert(fs.existsSync(require('node:path').join(__dirname,'../pwa',c.historyTokenIcon(symbol))));
+  const html=fs.readFileSync(require.resolve('../pwa/index.html'),'utf8');
+  assert(!html.includes('bdk-history-icon.png'),'New BDK image is limited to dynamically rendered history');
   console.log('✓ Mobile install guidance, native install, token selection, metadata and stale-response isolation passed');
+  console.log('✓ Settings X, back and cancel mode notices, unchanged selection, and token icon assets passed');
 })().catch(error => {console.error(error);process.exitCode=1;});

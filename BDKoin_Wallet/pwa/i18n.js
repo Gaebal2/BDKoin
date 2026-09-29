@@ -1,6 +1,9 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
+BDK토큰 지갑 모드입니다.|You are in BDK token wallet mode.
+PSL토큰 지갑 모드입니다.|You are in PSL token wallet mode.
+지갑 모드|Wallet mode
 BDK 토큰|BDK token
 PSL 토큰|PSL token
 토큰 선택|Select token
