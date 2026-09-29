@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="SASEUL BLOCK CHAIN BDK Token 지갑">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BDKoin Wallet">
+  <meta property="og:title" content="BDKoin Wallet">
+  <meta property="og:description" content="SASEUL BLOCK CHAIN BDK Token 지갑">
+  <link rel="canonical" href="https://gaebal2.github.io/BDKoin_Wallet/">
+  <meta property="og:url" content="https://gaebal2.github.io/BDKoin_Wallet/">
+  <meta property="og:image" content="https://gaebal2.github.io/BDKoin_Wallet/images/bdkoin-brand.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="BDKoin Wallet 앱 아이콘과 모바일 지갑 화면">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BDKoin Wallet">
+  <meta name="twitter:description" content="SASEUL BLOCK CHAIN BDK Token 지갑">
+  <meta name="twitter:image" content="https://gaebal2.github.io/BDKoin_Wallet/images/bdkoin-brand.png">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#050505">
+  <meta name="application-name" content="BDKoin Wallet">
+  <meta name="apple-mobile-web-app-title" content="Wallet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/bdkoin-app.png">
+  <link rel="stylesheet" href="framing.css?v=bdk1">
+  <link rel="stylesheet" href="styles.css?v=bdk1">
+  <link rel="stylesheet" href="wallets.css?v=bdk1">
+  <link rel="stylesheet" href="install.css?v=bdk1">
+  <link rel="stylesheet" href="history.css?v=bdk1">
+  <link rel="stylesheet" href="overlays.css?v=bdk1">
+  <title>BDKoin Wallet · Art for Peace & Children</title>
+  <link rel="stylesheet" href="bdk-theme.css?v=bdk1">
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <div id="pullRefresh" class="pull-refresh hidden" role="status" aria-live="polite" aria-hidden="true">
+    <span aria-hidden="true">↻</span><small id="pullRefreshLabel">아래로 당겨 새로고침</small>
+  </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="BDKoin Wallet 홈">
+        <img class="brand-mark" src="icons/icon.svg" alt="">
+        <span><small>SASEUL BLOCK CHAIN</small><strong>BDKoin Wallet</strong></span>
+      </a>
+      <div class="header-actions">
+        <span id="connectionState" class="connection"><i></i> 연결 확인 중</span>
+        <button id="languageToggle" class="language-toggle" type="button" translate="no" aria-label="언어: 한국어. 영어로 전환">ENG</button>
+        <button id="lockBtn" class="icon-button hidden" type="button" aria-label="지갑 잠그기" title="지갑 잠그기">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </button>
+        <button id="settingsBtn" class="icon-button" type="button" aria-label="설정 열기" title="설정">⚙</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="brand-hero"><img src="images/bdkoin-brand.png" width="1254" height="1254" alt="BDKoin · ART FOR PEACE &amp; CHILDREN" fetchpriority="high"></div>
+      <section id="onboarding" class="auth-view hidden" aria-labelledby="welcomeTitle">
+        
+        <p class="eyebrow">YOUR KEYS. YOUR PEACE.</p>
+        <h1 id="welcomeTitle">평화를 담은 지갑, BDKoin</h1>
+        <p class="lead">개인키는 서버로 전송되지 않으며, 이 기기에서 비밀번호로 암호화됩니다.</p>
+        <div class="auth-actions">
+          <button id="createBtn" class="button primary" type="button">새 지갑 만들기</button>
+          <button class="button secondary" type="button" data-restore-backup>백업된 개인키 불러오기</button>
+<button id="showImportBtn" class="button secondary" type="button">기존 지갑 가져오기</button>
+        </div>
+
+
+      </section>
+
+      <section id="unlock" class="auth-view hidden" aria-labelledby="unlockTitle">
+        <div class="orb small unlock-orb" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 9.7-1.7"/><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M12 14v2"/></svg></span></div>
+        <p class="eyebrow">WELCOME BACK</p>
+        <h1 id="unlockTitle">지갑 잠금 해제</h1>
+        <p class="lead">보호 비밀번호는 이 기기 안에서만 확인됩니다.</p>
+        <form id="unlockForm" class="auth-form compact">
+          <label for="unlockPassword">비밀번호</label>
+          <div class="password-field"><input id="unlockPassword" type="password" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus required name="unlockPassword" autocomplete="section-vault current-password" data-password-autocomplete="section-vault current-password"><button class="password-toggle" type="button" data-password-toggle="unlockPassword" aria-label="비밀번호 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+          <p id="unlockError" class="error" role="alert"></p>
+          <button id="unlockBtn" class="button primary" type="submit">잠금 해제</button>
+        </form>
+<button id="resetBtn" class="text-button danger-text" type="button">이 기기에서 지갑 삭제</button>
+      </section>
+
+      <section id="wallet" class="dashboard hidden">
+        <section class="balance-card" aria-labelledby="portfolioLabel">
+          <div class="peace-card-heading"><span>PEACE BALANCE</span><button id="balanceRefresh" class="icon-button" type="button" aria-label="잔액 새로고침">↻</button></div>
+          <div class="active-assets">
+            <div class="active-primary-balance"><div><img class="hero-balance-icon bdk-balance-icon" src="images/bdk-token-icon.svg" alt=""><strong id="bdkHeroBalance">—</strong><span id="bdkHeroSymbol" class="hero-balance-symbol">BDK</span></div><button id="balanceDetails" class="balance-caption" type="button">BDKoin Peace Token <span>↗</span></button></div>
+          </div>
+        </section>
+        <div class="card-top wallet-context">
+          <div class="active-wallet-identity"><p id="portfolioLabel" class="eyebrow light active-wallet-heading">ACTIVE WALLET <span id="networkBadge" class="network-badge">MAINNET</span></p><div class="active-wallet-name-row"><strong id="activeWalletName" class="active-wallet-name">지갑 1</strong><span class="active-wallet-address-row"><code id="accountAddress"></code><button id="copyAccount" type="button">복사</button></span></div></div>
+          <button id="editWalletsBtn" class="wallet-edit-button backup-missing" type="button"><span id="editWalletsStatusIcon" class="backup-status-icon" role="img" aria-label="경고">!</span><span>지갑 편집</span></button>
+        </div>
+          <details class="fee-tools"><summary>수수료 자산 관리 <span>SL</span></summary>
+            <div class="active-secondary-balance"><span>SL 메인넷 잔액</span><strong><img class="hero-balance-icon sl-balance-icon" src="images/sl-token-icon.png" alt=""><b id="slHeroBalance">—</b><span class="hero-balance-symbol">SL</span></strong></div>
+            <div class="active-card-actions" aria-label="활성 지갑 작업">
+            <button id="activeBdkSend" type="button"><span>↗</span>BDK 보내기</button>
+            <button id="activeBdkReceive" type="button"><span>↙</span>BDK 받기</button>
+            <button id="activeSlSend" type="button"><span>↗</span>SL 보내기</button>
+            <button id="activeSlReceive" type="button"><span>↙</span>SL 받기</button>
+          </div></details>
+        <p class="pull-refresh-hint">↓ 아래로 당겼다 놓으면 모든 지갑의 잔액이 새로고침됩니다.</p>
+        <aside class="security-note"><span>✓</span><div><strong>로컬 암호화 보관</strong><p>개인키는 AES-GCM으로 암호화되어 이 기기에만 저장됩니다.</p></div></aside>
+        <section class="history-section" aria-labelledby="historyTitle">
+          <div class="section-heading"><div><p class="eyebrow">HISTORY</p><h2 id="historyTitle">SL · BDK 거래 이력</h2></div><span id="historyPageBadge">1</span></div>
+          <p id="historyStatus" class="history-status">거래 이력을 불러오는 중입니다.</p>
+          <div id="historyList" class="history-list"></div>
+          <div id="historyPagination" class="history-pagination"><button id="historyPrev" type="button">이전</button><strong id="historyPage">1</strong><button id="historyNext" type="button">다음</button></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+<nav class="bottom-nav" aria-label="주요 메뉴"><button id="navAssets" data-tab="assets" type="button" class="active" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 9V6l13-3v3M16 11h5v5h-5a2.5 2.5 0 0 1 0-5Z"/></svg><span>자산</span></button>
+<button id="navSend" data-tab="send" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17M13 5l7 7-7 7"/></svg><span>전송</span></button>
+<button id="navReceive" data-tab="receive" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12H4M11 5l-7 7 7 7"/></svg><span>수신</span></button>
+<button id="navHistory" data-tab="history" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6M12 7v5l3 2"/></svg><span>거래</span></button>
+<button id="navSettings" data-tab="settings" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3-1 3-3 1-2 4 2 3v3l4 3 3-1 3 1 4-3v-3l2-3-2-4-3-1-1-3Z"/><circle cx="12" cy="12" r="3"/></svg><span>설정</span></button></nav>
+
+  <dialog id="installDialog" class="install-dialog" aria-labelledby="installTitle">
+    <div class="install-visual" aria-hidden="true">
+      <img class="install-logo" src="icons/icon.svg" alt="">
+      <span class="install-arrow">↓</span>
+    </div>
+    <p class="eyebrow">QUICK ACCESS</p>
+    <h2 id="installTitle">Wallet을 설치할까요?</h2>
+    <p id="installDescription" class="install-description">홈 화면이나 바탕화면에서 앱처럼 빠르게 열 수 있습니다.</p>
+    <div id="iosInstallHelp" class="install-help hidden">
+      Safari 하단의 <strong>공유</strong> 버튼을 누른 뒤 <strong>홈 화면에 추가</strong>를 선택하세요.
+    </div>
+    <div class="install-actions">
+      <button id="installBtn" class="button primary" type="button">폰·바탕화면에 설치</button>
+      <button id="installLaterBtn" class="button secondary" type="button">나중에</button>
+    </div>
+  </dialog>
+
+  <dialog id="createDialog" aria-labelledby="createTitle">
+    <div class="sheet-head"><div><p class="eyebrow">CREATE WALLET</p><h2 id="createTitle">지갑 보호 비밀번호</h2></div><button class="close" data-close type="button" aria-label="닫기">×</button></div>
+        <form id="createForm" class="auth-form" autocomplete="on">
+          <p class="helper">12자 이상을 권장합니다. 비밀번호는 복구할 수 없습니다.</p>
+          <label for="createPassword">비밀번호</label>
+          <div class="password-field"><input id="createPassword" type="password" minlength="10" autocorrect="off" autocapitalize="off" spellcheck="false" required name="createPassword" autocomplete="section-vault new-password" data-password-autocomplete="section-vault new-password"><button class="password-toggle" type="button" data-password-toggle="createPassword" aria-label="비밀번호 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+          <label for="createPasswordConfirm">비밀번호 확인</label>
+          <div class="password-field"><input id="createPasswordConfirm" type="password" minlength="10" autocorrect="off" autocapitalize="off" spellcheck="false" required name="createPasswordConfirm" autocomplete="section-vault new-password" data-password-autocomplete="section-vault new-password"><button class="password-toggle" type="button" data-password-toggle="createPasswordConfirm" aria-label="비밀번호 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+          <label class="check"><input id="createAck" type="checkbox" required> 비밀번호와 개인키를 잃으면 자산을 복구할 수 없음을 이해했습니다.</label>
+          <button class="button primary" type="submit">안전하게 생성</button>
+        </form>
+  </dialog>
+
+  <dialog id="importDialog" aria-labelledby="importTitle">
+        <form id="importForm" class="auth-form">
+          <div class="sheet-head"><h2 id="importTitle">기존 지갑 가져오기</h2><button id="importClose" class="close" type="button" aria-label="닫기">×</button></div>
+          <label for="importName">지갑 이름</label>
+          <input id="importName" maxlength="24" placeholder="지갑이름 입력" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none">
+          <label for="importKey">개인키 (64자리)</label>
+          <div class="password-field"><input id="importKey" type="password" maxlength="64" autocomplete="off" spellcheck="false" required><button class="password-toggle" type="button" data-password-toggle="importKey" aria-label="개인키 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+          <label for="importPassword">새 보호 비밀번호</label>
+          <div class="password-field"><input id="importPassword" type="password" minlength="10" autocorrect="off" autocapitalize="off" spellcheck="false" required name="importPassword" autocomplete="section-vault new-password" data-password-autocomplete="section-vault new-password"><button class="password-toggle" type="button" data-password-toggle="importPassword" aria-label="비밀번호 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+          <button class="button primary" type="submit">암호화하여 가져오기</button>
+        </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="safe-scroll-dialog" aria-labelledby="settingsTitle">
+    <form id="settingsForm" method="dialog">
+      <div class="sheet-head"><div><p class="eyebrow">PREFERENCES</p><h2 id="settingsTitle">네트워크 설정</h2></div><button id="settingsClose" class="close" type="button" aria-label="닫기">×</button></div>
+      <label for="endpoint">RPC 엔드포인트</label><input id="endpoint" type="url" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none" required>
+      <label for="cid">토큰 CID</label><textarea id="cid" rows="3" readonly translate="no"></textarea>
+      <p class="helper">신뢰하는 HTTPS RPC만 사용하세요. 변경한 RPC는 자동 저장됩니다.</p>
+      <div class="settings-divider"></div>
+      <button id="uninstallGuideBtn" class="button secondary" type="button">앱 제거 · 저장소 안내</button>
+    </form>
+  </dialog>
+
+  <dialog id="uninstallGuideDialog" class="transfer-review-dialog uninstall-guide-dialog" aria-labelledby="uninstallGuideTitle">
+    <div class="dialog-close-row"><button id="uninstallGuideClose" class="close" type="button" aria-label="닫기">×</button></div>
+    <div class="uninstall-guide-mark" aria-hidden="true">i</div>
+    <p class="eyebrow">APP REMOVAL &amp; STORAGE</p>
+    <h2 id="uninstallGuideTitle">앱을 제거하기 전에 확인해 주세요</h2>
+    <div class="uninstall-guide-summary">
+      <div><strong>사이트 저장소 유지</strong><p>암호화된 개인키가 브라우저 저장소에 남아 있으면 나중에 Wallet을 다시 설치한 뒤 기존 잠금 해제 비밀번호로 지갑을 사용할 수 있습니다.</p></div>
+      <div class="danger-note"><strong>사이트 저장소 삭제</strong><p>암호화된 개인키도 함께 삭제됩니다. 개인키를 백업하지 않았다면 지갑을 복구할 수 없습니다.</p></div>
+    </div>
+    <p class="helper center">Android 또는 브라우저가 앱 제거 시 사이트 저장소를 함께 삭제할 수도 있으므로, 앱을 제거하기 전에 개인키를 반드시 백업해 주세요.</p>
+    <div class="uninstall-guide-actions">
+      <button id="uninstallGuideBackup" class="button primary" type="button">개인키 보기</button>
+      <button id="uninstallGuideDelete" class="button danger" type="button">지갑 데이터 삭제</button>
+    </div>
+  </dialog>
+
+  <dialog id="addWalletDialog" aria-labelledby="addWalletTitle">
+    <div class="sheet-head"><div><p class="eyebrow">ADD WALLET</p><h2 id="addWalletTitle">개인키로 지갑 추가</h2></div><button id="addWalletClose" class="close" type="button" aria-label="닫기">×</button></div>
+    <div class="add-wallet-section">
+      <label for="additionalWalletName">지갑 이름</label><input id="additionalWalletName" maxlength="24" placeholder="예: 거래용 지갑" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none">
+      <label for="additionalWalletKey">개인키 (64자리)</label>
+      <div class="password-field"><input id="additionalWalletKey" type="password" maxlength="64" autocomplete="off" spellcheck="false"><button class="password-toggle" type="button" data-password-toggle="additionalWalletKey" aria-label="개인키 표시"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+      <button id="addWalletBtn" class="button primary" type="button">암호화하여 추가</button>
+    </div>
+  </dialog>
+
+  <dialog id="walletManagerDialog" class="wallet-manager-dialog safe-scroll-dialog" aria-labelledby="walletListTitle">
+    <div class="sheet-head"><div><p class="eyebrow">WALLETS</p><h2 id="walletListTitle">내 지갑</h2></div><button id="walletManagerClose" class="close" type="button" aria-label="닫기">×</button></div>
+    <div class="wallet-manager-count"><span>등록된 지갑</span><strong id="walletCount">1</strong></div>
+    <div class="backup-status-card backup-missing">
+      <div class="backup-status-message" role="status"><span class="backup-status-icon" aria-hidden="true">!</span><div><strong class="backup-status-title">경고</strong><p class="backup-status-description">개인키 기기에 백업 안됨</p></div></div>
+      <button class="button backup-status-action" type="button" data-device-backup>해결하기</button>
+    </div>
+<button class="button secondary" type="button" data-restore-backup>백업된 개인키 불러오기</button>
+<button id="exportBtn" class="button secondary" type="button">개인키 보기</button>
+<div id="walletList" class="wallet-list"></div>
+    <button id="openAddWalletBtn" class="button secondary add-wallet-button" type="button">+ 개인키로 지갑 추가</button>
+    <button id="createAdditionalWalletBtn" class="button secondary add-wallet-button" type="button">+ 새 지갑 생성</button>
+  </dialog>
+
+  <dialog id="createWalletConfirmDialog" class="transfer-review-dialog" aria-labelledby="createWalletConfirmTitle">
+    <div class="transfer-review-mark" aria-hidden="true">＋</div>
+    <p class="eyebrow">CREATE WALLET</p>
+    <h2 id="createWalletConfirmTitle">새 지갑을 생성하시겠습니까?</h2>
+    <p class="helper center">새 개인키가 이 기기에서 안전하게 생성되고 현재 비밀번호로 암호화됩니다. 생성 후 개인키를 반드시 백업해 주세요.</p>
+    <div class="dialog-field"><label for="createWalletName">지갑 이름</label><input id="createWalletName" maxlength="24" placeholder="예: 새 지갑" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none"></div>
+    <div class="transfer-review-actions"><button id="createWalletConfirmCancel" class="button secondary" type="button">취소</button><button id="createWalletConfirmAccept" class="button primary" type="button">생성</button></div>
+  </dialog>
+
+  <dialog id="sendPanel" class="sheet" aria-labelledby="sendTitle">
+    <div class="sheet-head"><div><p class="eyebrow">TRANSFER</p><h2 id="sendTitle">BDK 보내기</h2></div><button class="close" data-close type="button" aria-label="닫기">×</button></div>
+    <form id="sendForm" autocomplete="off">
+      <label for="toAddress">받는 주소</label>
+      <input id="toAddress" maxlength="44" placeholder="44자리 SASEUL 주소" autocomplete="off" spellcheck="false" required>
+      <div class="label-row"><label for="amount">수량</label><button id="maxBtn" type="button">최대</button></div>
+      <div class="amount-input"><input id="amount" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none" required><span id="amountSymbol">BDK</span></div>
+      <p id="sendError" class="error" role="alert"></p>
+      <button id="sendBtn" class="button primary" type="submit">검토 후 전송</button>
+    </form>
+  </dialog>
+
+  <dialog id="receivePanel" class="sheet" aria-labelledby="receiveTitle">
+    <div class="sheet-head"><div><p class="eyebrow">RECEIVE</p><h2 id="receiveTitle">SL 받기</h2></div><button class="close" data-close type="button" aria-label="닫기">×</button></div>
+    <div class="qr-frame"><div id="receiveQr" class="qr-code" role="img" aria-label="지갑 주소 QR 코드"></div></div>
+    <p id="receiveHelp" class="center helper">아래 SASEUL 주소를 보내는 사람에게 공유하세요.</p>
+    <div class="address-box"><code id="receiveAddress"></code><button id="copyAddress" type="button">주소 복사</button></div>
+  </dialog>
+
+  <dialog id="transferReviewDialog" class="transfer-review-dialog" aria-labelledby="transferReviewTitle">
+    <div class="transfer-review-mark" aria-hidden="true">↗</div>
+    <p class="eyebrow">CONFIRM TRANSFER</p>
+    <h2 id="transferReviewTitle">전송 정보를 확인해 주세요</h2>
+    <div class="transfer-review-summary">
+      <div><span>보낼 수량</span><strong id="transferReviewAmount"></strong></div>
+      <div id="transferReviewFeeRow"><span>네트워크 수수료</span><strong id="transferReviewFee"></strong></div>
+      <div><span>받는 주소</span><code id="transferReviewAddress"></code></div>
+    </div>
+    <p class="helper center">주소와 수량이 정확한지 다시 확인해 주세요.</p>
+    <div class="transfer-review-actions"><button id="transferReviewCancel" class="button secondary" type="button">취소</button><button id="transferReviewConfirm" class="button primary" type="button">전송하기</button></div>
+  </dialog>
+
+  <dialog id="transferSuccessDialog" class="transfer-success-dialog" aria-labelledby="transferSuccessTitle">
+    <div id="transferSuccessMark" class="transfer-success-mark" aria-hidden="true">…</div>
+    <p id="transferSuccessEyebrow" class="eyebrow">TRANSFER STATUS</p>
+    <h2 id="transferSuccessTitle">보내기(처리중...)</h2>
+    <p id="transferSuccessMessage" class="helper center"></p>
+    <button id="transferSuccessClose" class="button primary" type="button" disabled>확인</button>
+  </dialog>
+
+  <dialog id="appAlertDialog" class="transfer-success-dialog app-alert-dialog" aria-labelledby="appAlertTitle">
+    <div class="app-alert-mark" aria-hidden="true">!</div>
+    <p class="eyebrow">NOTICE</p>
+    <h2 id="appAlertTitle">확인해 주세요</h2>
+    <p id="appAlertMessage" class="helper center"></p>
+    <dl id="appAlertDetails" class="app-alert-details hidden"></dl>
+    <button id="appAlertClose" class="button primary" type="button">확인</button>
+  </dialog>
+
+  <dialog id="dangerConfirmDialog" class="transfer-review-dialog danger-confirm-dialog" aria-labelledby="dangerConfirmTitle">
+    <div class="danger-confirm-mark" aria-hidden="true">!</div>
+    <p class="eyebrow">SECURITY CHECK</p>
+    <h2 id="dangerConfirmTitle">지갑을 삭제할까요?</h2>
+    <p id="dangerConfirmMessage" class="helper center"></p>
+    <div id="dangerConfirmPhraseWrap" class="danger-confirm-phrase hidden">
+      <label for="dangerConfirmPhrase">확인을 위해 “삭제”를 입력해 주세요.</label>
+      <input id="dangerConfirmPhrase" autocomplete="off" placeholder="삭제">
+      <p id="dangerConfirmError" class="error" role="alert"></p>
+    </div>
+    <div class="transfer-review-actions"><button id="dangerConfirmCancel" class="button secondary" type="button">취소</button><button id="dangerConfirmAccept" class="button danger" type="button">삭제</button></div>
+  </dialog>
+
+  <dialog id="textInputDialog" class="transfer-review-dialog text-input-dialog" aria-labelledby="textInputTitle">
+    <div class="transfer-review-mark" aria-hidden="true">✎</div>
+    <p class="eyebrow">EDIT WALLET</p>
+    <h2 id="textInputTitle">지갑 이름 변경</h2>
+    <div class="dialog-field"><label id="textInputLabel" for="textInputValue">새 지갑 이름</label><input id="textInputValue" maxlength="24" autocomplete="off"><p id="textInputError" class="error" role="alert"></p></div>
+    <div class="transfer-review-actions"><button id="textInputCancel" class="button secondary" type="button">취소</button><button id="textInputAccept" class="button primary" type="button">변경</button></div>
+  </dialog>
+
+  <dialog id="backupConfirmDialog" class="transfer-review-dialog backup-dialog" aria-labelledby="backupConfirmTitle">
+    <div class="backup-dialog-mark" aria-hidden="true">◆</div>
+    <p class="eyebrow">PRIVATE KEY BACKUP</p>
+    <h2 id="backupConfirmTitle">개인키를 확인할까요?</h2>
+    <p class="helper center">화면을 볼 수 있는 사람은 개인키로 자산을 가져갈 수 있습니다. 혼자 있는 안전한 장소에서만 확인해 주세요.</p>
+    <div class="transfer-review-actions"><button id="backupConfirmCancel" class="button secondary" type="button">취소</button><button id="backupConfirmAccept" class="button primary" type="button">개인키 보기</button></div>
+  </dialog>
+
+  <dialog id="privateKeyDialog" class="transfer-review-dialog backup-dialog" aria-labelledby="privateKeyTitle">
+    <div class="backup-dialog-mark" aria-hidden="true">◇</div>
+    <p class="eyebrow">PRIVATE KEY</p>
+    <h2 id="privateKeyTitle">개인키 보기</h2>
+    <p class="helper center">아래 개인키를 오프라인의 안전한 장소에 보관하세요.</p>
+    <div id="privateKeyList"></div>
+    <button id="privateKeyClose" class="button primary" type="button">확인</button>
+  </dialog>
+
+
+
+  <dialog id="deviceBackupDialog" class="safe-scroll-dialog" aria-labelledby="deviceBackupTitle">
+    <div class="sheet-head"><h2 id="deviceBackupTitle" tabindex="-1" autofocus>개인키 백업</h2><button id="deviceBackupClose" class="close" type="button" aria-label="닫기">×</button></div>
+<ol class="backup-steps"><li aria-current="step"><span>1</span><strong>1단계</strong><small>개인키 저장하기</small></li><li><span>2</span><strong>2단계</strong><small>저장된 개인키 확인하기</small></li><li><span>3</span><strong>3단계</strong><small>저장한 개인키 불러오기</small></li></ol>
+    <p id="deviceBackupWallet" class="helper">개인키를 이 디바이스에 백업해 놓는 것이 사용자의 코인(토큰)보호를 보장하지 않습니다.</p>
+    <form id="deviceBackupForm">
+      <label for="deviceBackupPassword">백업용 비밀번호 (10자 이상, 12자 이상 권장)</label><div class="password-field"><input id="deviceBackupPassword" type="password" minlength="10" required name="deviceBackupPassword" autocomplete="section-backup new-password" data-password-autocomplete="section-backup new-password"><button class="password-toggle" type="button" data-password-toggle="deviceBackupPassword" aria-label="비밀번호 표시" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+      <label for="deviceBackupConfirm">백업용 비밀번호 확인</label><div class="password-field"><input id="deviceBackupConfirm" type="password" minlength="10" required name="deviceBackupConfirm" autocomplete="section-backup new-password" data-password-autocomplete="section-backup new-password"><button class="password-toggle" type="button" data-password-toggle="deviceBackupConfirm" aria-label="비밀번호 표시" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+      <button id="deviceBackupSave" class="button primary" type="submit" disabled>새 백업 파일 저장</button>
+    </form>
+    <p id="deviceBackupError" class="error" role="alert"></p>
+  </dialog>
+  <dialog id="backupLocationDialog" aria-labelledby="backupLocationTitle">
+    <h2 id="backupLocationTitle">기기에 저장한 백업</h2>
+    <p class="helper">파일명</p><p id="backupFileName" translate="no"></p>
+    <p class="helper">저장 위치: 파일 저장 시 선택한 폴더 또는 기기의 다운로드 폴더를 확인해 주세요. 브라우저에서는 전체 폴더 경로를 제공하지 않습니다.</p>
+    <p class="helper">마지막으로 확인한 파일 내용과 현재 지갑 목록이 일치합니다. 파일을 이동하거나 삭제했다면 다시 확인해 주세요.</p>
+    <button id="backupLocationVerify" class="button secondary" type="button">저장한 백업 파일 확인하기</button>
+    <button id="backupLocationCreate" class="button secondary" type="button">새로운 파일에 저장</button>
+    <button id="backupLocationClose" class="button primary" type="button">닫기</button>
+  </dialog>
+  <dialog id="restoreBackupDialog" class="safe-scroll-dialog" aria-labelledby="restoreBackupTitle">
+    <div class="sheet-head"><h2 id="restoreBackupTitle">백업된 개인키 불러오기</h2><button id="restoreBackupClose" class="close" type="button" aria-label="닫기">×</button></div>
+    <div id="restoreBackupSteps" class="hidden"><ol class="backup-steps"><li><span>1</span><strong>1단계</strong><small>개인키 저장하기</small></li><li aria-current="step"><span>2</span><strong>2단계</strong><small>저장된 개인키 확인하기</small></li><li><span>3</span><strong>3단계</strong><small>저장한 개인키 불러오기</small></li></ol></div>
+
+    <form id="restoreBackupForm">
+<div id="restoreBackupInputs">
+      <label for="restoreBackupFile">암호화된 백업 파일</label><input id="restoreBackupFile" type="file" accept=".json,application/json" required>
+      <label for="restoreBackupPassword">백업 당시 비밀번호</label><div class="password-field"><input id="restoreBackupPassword" type="password" required name="restoreBackupPassword" autocomplete="section-backup current-password" data-password-autocomplete="section-backup current-password"><button class="password-toggle" type="button" data-password-toggle="restoreBackupPassword" aria-label="비밀번호 표시" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+      <div id="restoreVaultFields">
+        <label for="restoreVaultPassword">새 지갑 잠금 비밀번호 (10자 이상)</label><div class="password-field"><input id="restoreVaultPassword" type="password" minlength="10" name="restoreVaultPassword" autocomplete="section-vault new-password" data-password-autocomplete="section-vault new-password"><button class="password-toggle" type="button" data-password-toggle="restoreVaultPassword" aria-label="비밀번호 표시" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+        <label for="restoreVaultConfirm">새 지갑 잠금 비밀번호 확인</label><div class="password-field"><input id="restoreVaultConfirm" type="password" minlength="10" name="restoreVaultConfirm" autocomplete="section-vault new-password" data-password-autocomplete="section-vault new-password"><button class="password-toggle" type="button" data-password-toggle="restoreVaultConfirm" aria-label="비밀번호 표시" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12C4.5 8 8 6 12 6s7.5 2 9.5 6c-2 4-5.5 6-9.5 6s-7.5-2-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg></button></div>
+      </div>
+</div>
+<div id="restoreBackupSummary" class="helper hidden"><h3>개인키가 저장된 지갑 리스트</h3><div id="restoreBackupWalletNames" translate="no"></div></div>
+      <p id="restoreBackupError" class="error" role="alert"></p>
+      <div class="backup-navigation">
+      <button id="restoreBackupPrevious" class="button secondary hidden" type="button">&lt; 이전</button>
+      <button id="restoreBackupSubmit" class="button primary" type="submit">백업된 개인키 불러오기</button>
+      </div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" popover="manual"></div>
+  <script src="vendor/crypto-js.min.js"></script>
+  <script src="vendor/nacl-fast.min.js"></script>
+  <script src="vendor/axios.min.js"></script>
+  <script src="vendor/qrcode.min.js"></script>
+  <script src="vendor/saseul.min.js"></script>
+  <script src="backup.js?v=bdk1"></script>
+  <script src="i18n.js?v=bdk1"></script>
+  <script src="app.js?v=bdk1"></script>
+</body>
+</html>

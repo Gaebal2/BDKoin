@@ -1,0 +1,50 @@
+{
+  "at": "2026-09-29T02:02:19.012Z",
+  "network": "mainnet",
+  "config": {
+    "endpoint": "https://main.saseul.net",
+    "address": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+    "space": "BDKOIN_PEACE_NETWORK",
+    "name": "BDKoin",
+    "symbol": "BDK",
+    "supply": "2491000000",
+    "decimals": 18
+  },
+  "cid": "fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0",
+  "amount": "2491000000000000000000000000",
+  "methods": [],
+  "node": {
+    "code": 200,
+    "data": {
+      "status": "is_running",
+      "version": "2.2.0.5",
+      "mining": false,
+      "last_block": {
+        "height": 4414755,
+        "s_timestamp": 1790647331000000,
+        "previous_blockhash": "065c95918bba80cd136f58bf9e61b07e2794bc3b8b1dd450039ce42dce7b71b5275ca752e1e3c7",
+        "blockhash": "065c9592150ec045c59c6d12c06ae336955d4b952e473b641e659084588e975d0d295969046b44",
+        "transaction_count": 1
+      },
+      "last_resource_block": {
+        "height": 2326627,
+        "blockhash": "065c958c5f1b117751f12d5b3aa276b21ca5dd64e21a5bdab3560321e8720a5069ab2ce7b7ed5b",
+        "previous_blockhash": "065c958bba739c56082649c90c811abfc83d2bf01710e30bbbeba33f4b63dabb4fb301a307737d",
+        "nonce": "96a1a0f71e9996a3b76805701c799011e2407b8e86358627fcbc",
+        "timestamp": 1790647235189521,
+        "difficulty": "327665031701921",
+        "main_height": 4414740,
+        "main_blockhash": "065c958b86974076bbad94909d7f99e2cdbd27d2f6b7bfd4fee467aa745eea0680ae448c3c423e",
+        "validator": "5009afde96623d9d5fa8510c04129077392709a2ea9b",
+        "miner": "72c99bb41a08ad4450e1f6d2ff5af5b22bd1407c4a2f",
+        "receipt_count": 0
+      }
+    }
+  },
+  "balance": {
+    "code": 200,
+    "data": {
+      "balance": "189999984696000000000"
+    }
+  }
+}

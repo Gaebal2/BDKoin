@@ -1,0 +1,243 @@
+{
+  "network": "mainnet",
+  "config": {
+    "endpoint": "https://main.saseul.net",
+    "address": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+    "space": "BDKOIN_PEACE_NETWORK",
+    "name": "BDKoin",
+    "symbol": "BDK",
+    "supply": "2491000000",
+    "decimals": 18
+  },
+  "cid": "fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0",
+  "amount": "2491000000000000000000000000",
+  "transactions": [
+    {
+      "label": "Publish:Mint",
+      "hash": "065c958c2c54f0be79dd4a17d85cdb19d594e771a315d3d87cbb411a93506f3a22e20219cbf509",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"contract\",\"m\":\"0.2.0\",\"n\":\"Mint\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"name\":{\"name\":\"name\",\"type\":\"string\",\"maxlength\":80,\"requirements\":true,\"default\":null,\"cases\":null},\"symbol\":{\"name\":\"symbol\",\"type\":\"string\",\"maxlength\":20,\"requirements\":true,\"default\":null,\"cases\":null},\"amount\":{\"name\":\"amount\",\"type\":\"string\",\"maxlength\":80,\"requirements\":true,\"default\":null,\"cases\":null},\"decimal\":{\"name\":\"decimal\",\"type\":\"int\",\"maxlength\":2,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$eq\":[{\"$read_universal\":[\"info\",\"00\",null]},null]},\"The token can only be issued once.\"]},{\"$condition\":[{\"$eq\":[\"b3709416c74988580a04f7c993adaa344cca212cacd7\",{\"$load_param\":[\"from\"]}]},\"You are not the contract writer.\"]},{\"$condition\":[{\"$gt\":[{\"$load_param\":[\"amount\"]},\"0\"]},\"The amount must be greater than 0.\"]},{\"$condition\":[{\"$gte\":[{\"$load_param\":[\"decimal\"]},\"0\"]},\"The decimal must be greater than or equal to 0.\"]},{\"$write_universal\":[\"info\",\"00\",{\"name\":{\"$load_param\":[\"name\"]},\"symbol\":{\"$load_param\":[\"symbol\"]},\"total_supply\":{\"$load_param\":[\"amount\"]},\"decimal\":{\"$load_param\":[\"decimal\"]}}]},{\"$write_universal\":[\"balance\",{\"$load_param\":[\"from\"]},{\"$load_param\":[\"amount\"]}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647231862000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "a69acfd8e78021c0de8de10d53c8a8b973f49db3fd1929f60dbf48134877a106b3f3cbbc65263086b7be10fd7866f864cdb2154923041bf399bae5019a13820c"
+      },
+      "estimatedFeeBaseUnits": "2544000002068000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:00:29.979Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958c2c54f0be79dd4a17d85cdb19d594e771a315d3d87cbb411a93506f3a22e20219cbf509"
+      },
+      "confirmedAt": "2026-09-29T02:00:40.501Z"
+    },
+    {
+      "label": "Publish:GetInfo",
+      "hash": "065c958ccf9db872993234c3319d7955588bd234664c989eb6a38160ef6de8fb7ccd9bf9d35761",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"request\",\"m\":\"0.2.0\",\"n\":\"GetInfo\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":[],\"e\":[{\"$condition\":[{\"$ne\":[{\"$read_universal\":[\"info\",\"00\",null]},null]},\"The token has not been issued yet.\"]},{\"$response\":[{\"$read_universal\":[\"info\",\"00\",null]}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647242563000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "6de077330e5f88d6500cc074cced2213659dd3321b5c2dce443c998fd2d68717bb87bb201286d12bb802e572e985541f8b0d90d87888251a7b62a53b52973204"
+      },
+      "estimatedFeeBaseUnits": "606000000957000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:00:40.706Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958ccf9db872993234c3319d7955588bd234664c989eb6a38160ef6de8fb7ccd9bf9d35761"
+      },
+      "confirmedAt": "2026-09-29T02:00:47.101Z"
+    },
+    {
+      "label": "Publish:Send",
+      "hash": "065c958d344b289596efdf1b2dff7155cc2ae16fff75891a7aaf1999831b06c7cd8d54b6f634cd",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"contract\",\"m\":\"0.2.0\",\"n\":\"Send\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"to\":{\"name\":\"to\",\"type\":\"string\",\"maxlength\":44,\"requirements\":true,\"default\":null,\"cases\":null},\"amount\":{\"name\":\"amount\",\"type\":\"string\",\"maxlength\":40,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$ne\":[{\"$load_param\":[\"from\"]},{\"$load_param\":[\"to\"]}]},\"You can't send to yourself.\"]},{\"$condition\":[{\"$gt\":[{\"$load_param\":[\"amount\"]},\"0\"]},\"The amount must be greater than 0.\"]},{\"$condition\":[{\"$gte\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"from\"]},\"0\"]},{\"$load_param\":[\"amount\"]}]},\"You can't send more than what you have.\"]},{\"$write_universal\":[\"balance\",{\"$load_param\":[\"from\"]},{\"$sub\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"from\"]},\"0\"]},{\"$load_param\":[\"amount\"]}]}]},{\"$write_universal\":[\"balance\",{\"$load_param\":[\"to\"]},{\"$add\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"to\"]},\"0\"]},{\"$load_param\":[\"amount\"]}]}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647249161000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "7b0074bce02d856d8c1b177978c59f77facc05f0b772a3b74fa3d344fd3d30915a980cc23363828cbd28471a543af98a5e79d2917a96ac0ac88853eac4ae510a"
+      },
+      "estimatedFeeBaseUnits": "2018000001773000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:00:47.281Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958d344b289596efdf1b2dff7155cc2ae16fff75891a7aaf1999831b06c7cd8d54b6f634cd"
+      },
+      "confirmedAt": "2026-09-29T02:00:53.647Z"
+    },
+    {
+      "label": "Publish:GetBalance",
+      "hash": "065c958d98299015236c6af588b283b53446c9d0b149a611f8c0737d1eb156c02d4f22e25f48fc",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"request\",\"m\":\"0.2.0\",\"n\":\"GetBalance\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"address\":{\"name\":\"address\",\"type\":\"string\",\"maxlength\":44,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$response\":[{\"balance\":{\"$read_universal\":[\"balance\",{\"$load_param\":[\"address\"]},\"0\"]}}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647255706000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "814f15cd2373f48faafe60f093ba4a1f294c40cdbbc183f32eb9d10e9de1877216517dcee5f80412bc528df750dc0c301c16f81b1170c5b5978431c67823bd0d"
+      },
+      "estimatedFeeBaseUnits": "684000001008000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:00:53.830Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958d98299015236c6af588b283b53446c9d0b149a611f8c0737d1eb156c02d4f22e25f48fc"
+      },
+      "confirmedAt": "2026-09-29T02:00:58.131Z"
+    },
+    {
+      "label": "Publish:Deposit",
+      "hash": "065c958ddc9918b60c438a262ffbc71855ecc5490a1564611f356e58734c0fba28edc026878599",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"contract\",\"m\":\"0.2.0\",\"n\":\"Deposit\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"to\":{\"name\":\"to\",\"type\":\"string\",\"maxlength\":44,\"requirements\":true,\"default\":null,\"cases\":null},\"amount\":{\"name\":\"amount\",\"type\":\"string\",\"maxlength\":40,\"requirements\":true,\"default\":null,\"cases\":null},\"release_timestamp\":{\"name\":\"release_timestamp\",\"type\":\"int\",\"maxlength\":40,\"requirements\":true,\"default\":null,\"cases\":null},\"auth_key\":{\"name\":\"auth_key\",\"type\":\"string\",\"maxlength\":64,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$ne\":[{\"$load_param\":[\"from\"]},{\"$load_param\":[\"to\"]}]},\"You can't deposit to yourself.\"]},{\"$condition\":[{\"$eq\":[{\"$read_universal\":[\"order\",{\"$hash\":[{\"$load_param\":[\"hash\"]}]},null]},null]},\"The same order already exists.\"]},{\"$condition\":[{\"$gt\":[{\"$load_param\":[\"amount\"]},\"0\"]},\"The amount must be greater than 0.\"]},{\"$condition\":[{\"$gte\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"from\"]},\"0\"]},{\"$load_param\":[\"amount\"]}]},\"You can't deposit more than what you have.\"]},{\"$write_universal\":[\"balance\",{\"$load_param\":[\"from\"]},{\"$sub\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"from\"]},\"0\"]},{\"$load_param\":[\"amount\"]}]}]},{\"$write_universal\":[\"order\",{\"$hash\":[{\"$load_param\":[\"hash\"]}]},{\"from\":{\"$load_param\":[\"from\"]},\"to\":{\"$load_param\":[\"to\"]},\"amount\":{\"$load_param\":[\"amount\"]},\"release_timestamp\":{\"$load_param\":[\"release_timestamp\"]},\"auth_key\":{\"$load_param\":[\"auth_key\"]},\"status\":\"deposited\"}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647260191000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "a2489661c4a2122c263630987289496ff5003f46a5e92864f851349f28e597fc15e844ca85e340512717d5c96a449e6d0a1109b7ac9675ef9ff7ab97fde75507"
+      },
+      "estimatedFeeBaseUnits": "3044000002358000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:00:58.304Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958ddc9918b60c438a262ffbc71855ecc5490a1564611f356e58734c0fba28edc026878599"
+      },
+      "confirmedAt": "2026-09-29T02:01:04.748Z"
+    },
+    {
+      "label": "Publish:Approve",
+      "hash": "065c958e419890944d2a849e11c50d3afcf92dd81cd31f7550c2df83ad8f5291729acfe3cd8a36",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"contract\",\"m\":\"0.2.0\",\"n\":\"Approve\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"order_id\":{\"name\":\"order_id\",\"type\":\"string\",\"maxlength\":64,\"requirements\":true,\"default\":null,\"cases\":null},\"auth_token\":{\"name\":\"auth_token\",\"type\":\"string\",\"maxlength\":64,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$ne\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},null]},\"The order does not exist.\"]},{\"$condition\":[{\"$eq\":[{\"$hash\":[{\"$load_param\":[\"auth_token\"]}]},{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"auth_key\"]}]},\"The value \\\"auth_token\\\" is incorrect.\"]},{\"$condition\":[{\"$eq\":[{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"status\"]},\"deposited\"]},\"Only orders with status \\\"deposited\\\" can be approved.\"]},{\"$write_universal\":[\"balance\",{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"to\"]},{\"$add\":[{\"$read_universal\":[\"balance\",{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"to\"]},\"0\"]},{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"amount\"]}]}]},{\"$write_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},{\"from\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"from\"]},\"to\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"to\"]},\"amount\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"amount\"]},\"release_timestamp\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"release_timestamp\"]},\"auth_token\":{\"$load_param\":[\"auth_token\"]},\"auth_key\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"auth_key\"]},\"status\":\"approved\"}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647266810000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "7215038d9bb6bbbba9ca763842f7b16d127a71a46088e1a8fe22acf7728c60ab8a8c2e5f3b4206f2a75e109828e89ce7d6ca204b2accd2576061eb88c4e70d09"
+      },
+      "estimatedFeeBaseUnits": "3588000002666000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:01:04.931Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958e419890944d2a849e11c50d3afcf92dd81cd31f7550c2df83ad8f5291729acfe3cd8a36"
+      },
+      "confirmedAt": "2026-09-29T02:01:11.304Z"
+    },
+    {
+      "label": "Publish:Cancel",
+      "hash": "065c958ea59e0838a5fc39db0d5aa1ab50c8ad2cfc1a3bcc01bca6bc0a0acaa7a4d5bdc563575c",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"contract\",\"m\":\"0.2.0\",\"n\":\"Cancel\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"order_id\":{\"name\":\"order_id\",\"type\":\"string\",\"maxlength\":64,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$ne\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},null]},\"The order does not exist.\"]},{\"$condition\":[{\"$eq\":[{\"$load_param\":[\"from\"]},{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"from\"]}]},\"You are not the maker of the order.\"]},{\"$condition\":[{\"$gt\":[{\"$load_param\":[\"timestamp\"]},{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"release_timestamp\"]}]},\"You can cancel an order after the release timestamp.\"]},{\"$condition\":[{\"$eq\":[{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"status\"]},\"deposited\"]},\"Only orders with status \\\"deposited\\\" can be cancelled.\"]},{\"$write_universal\":[\"balance\",{\"$load_param\":[\"from\"]},{\"$add\":[{\"$read_universal\":[\"balance\",{\"$load_param\":[\"from\"]},\"0\"]},{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"amount\"]}]}]},{\"$write_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},{\"from\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"from\"]},\"to\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"to\"]},\"amount\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"amount\"]},\"release_timestamp\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"release_timestamp\"]},\"auth_key\":{\"$get\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},\"auth_key\"]},\"status\":\"cancelled\"}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647273365000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "7c5b6559f9bcad88beefd8c289582152ec70f46969d7d8ca0028804fee5098ddea870f78f456b6614e46e86ab9ab6e3e8090409aa5e4634a6ecaed913a92e70c"
+      },
+      "estimatedFeeBaseUnits": "3418000002557000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:01:11.485Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958ea59e0838a5fc39db0d5aa1ab50c8ad2cfc1a3bcc01bca6bc0a0acaa7a4d5bdc563575c"
+      },
+      "confirmedAt": "2026-09-29T02:01:15.789Z"
+    },
+    {
+      "label": "Publish:GetOrder",
+      "hash": "065c958eea09a803a46bb650d6664d101d303fa94f0414aafca22c01ccc3b5b20dc3e889b08480",
+      "signed": {
+        "transaction": {
+          "type": "Publish",
+          "code": "{\"t\":\"request\",\"m\":\"0.2.0\",\"n\":\"GetOrder\",\"v\":\"1\",\"s\":\"BDKOIN_PEACE_NETWORK\",\"w\":\"b3709416c74988580a04f7c993adaa344cca212cacd7\",\"p\":{\"order_id\":{\"name\":\"order_id\",\"type\":\"string\",\"maxlength\":64,\"requirements\":true,\"default\":null,\"cases\":null}},\"e\":[{\"$condition\":[{\"$ne\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]},null]},\"The order does not exist.\"]},{\"$response\":[{\"$read_universal\":[\"order\",{\"$load_param\":[\"order_id\"]},null]}]}]}",
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647277849000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "1b5ea0b3234064d6ede8678494a34672c726be0f79ae19641d46f87d52258dedf4058653d17468241f4ea9a86f4621bfa6ab6bb4f380f533deacedc5c384ab0f"
+      },
+      "estimatedFeeBaseUnits": "908000001130000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:01:15.965Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958eea09a803a46bb650d6664d101d303fa94f0414aafca22c01ccc3b5b20dc3e889b08480"
+      },
+      "confirmedAt": "2026-09-29T02:01:20.299Z"
+    },
+    {
+      "label": "Mint",
+      "hash": "065c958f2ee2a8521efe9086885875461fc92f651aa9972ce2e94204181bb98b930b04915f009e",
+      "signed": {
+        "transaction": {
+          "cid": "fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0",
+          "type": "Mint",
+          "name": "BDKoin",
+          "symbol": "BDK",
+          "amount": "2491000000000000000000000000",
+          "decimal": 18,
+          "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+          "timestamp": 1790647282361000
+        },
+        "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+        "signature": "64bab6dc941c0a107453b4c0ec41ef4d0104ca7fecf55fa28df9435b933fadcdd5ccdc148c847a8ce59a850f7557d38669a8774822ff798831a6312bc74dc706"
+      },
+      "estimatedFeeBaseUnits": "787000000000",
+      "status": "confirmed",
+      "submittedAt": "2026-09-29T02:01:20.481Z",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c958f2ee2a8521efe9086885875461fc92f651aa9972ce2e94204181bb98b930b04915f009e"
+      },
+      "confirmedAt": "2026-09-29T02:01:24.803Z"
+    }
+  ],
+  "verifiedAt": "2026-09-29T02:02:20.177Z",
+  "info": {
+    "name": "BDKoin",
+    "symbol": "BDK",
+    "total_supply": "2491000000000000000000000000",
+    "decimal": 18
+  },
+  "balance": "2491000000000000000000000000",
+  "nativeBalance": {
+    "code": 200,
+    "data": {
+      "balance": "189999984696000000000"
+    }
+  },
+  "secondaryVerification": {
+    "endpoint": "https://sub.saseul.net",
+    "at": "2026-09-29T02:02:20.177Z",
+    "info": {
+      "name": "BDKoin",
+      "symbol": "BDK",
+      "total_supply": "2491000000000000000000000000",
+      "decimal": 18
+    },
+    "balance": "2491000000000000000000000000"
+  }
+}

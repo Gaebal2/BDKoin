@@ -1,0 +1,99 @@
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
+const root = path.resolve(__dirname, '..');
+const pwa = path.join(root, 'pwa');
+const required = ['index.html', 'framing.css', 'styles.css', 'wallets.css', 'install.css', 'history.css', 'overlays.css', 'bdk-theme.css', 'app.js', 'sw.js', 'manifest.webmanifest', 'icons/icon.svg', 'images/bdkoin-brand.png', 'images/bdk-token-icon.svg', 'images/sl-token-icon.png', 'vendor/qrcode.min.js'];
+const failures = [];
+
+for (const file of required) {
+  if (!fs.existsSync(path.join(pwa, file))) failures.push(`Missing ${file}`);
+}
+
+for (const file of ['app.js', 'backup.js', 'i18n.js', 'sw.js', 'server.js']) {
+  try { new vm.Script(fs.readFileSync(path.join(pwa, file), 'utf8'), { filename: file }); }
+  catch (error) { failures.push(error.message); }
+}
+
+try {
+  const manifest = JSON.parse(fs.readFileSync(path.join(pwa, 'manifest.webmanifest'), 'utf8'));
+  for (const field of ['name', 'short_name', 'start_url', 'display', 'icons']) {
+    if (!manifest[field]) failures.push(`Manifest is missing ${field}`);
+  }
+  for (const icon of manifest.icons || []) {
+    if (!fs.existsSync(path.join(pwa, icon.src))) failures.push(`Manifest icon not found: ${icon.src}`);
+  }
+} catch (error) { failures.push(`Invalid manifest: ${error.message}`); }
+
+const html = fs.readFileSync(path.join(pwa, 'index.html'), 'utf8');
+const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+if (duplicates.length) failures.push(`Duplicate HTML ids: ${[...new Set(duplicates)].join(', ')}`);
+const appSource = fs.readFileSync(path.join(pwa, 'app.js'), 'utf8');
+const swSource = fs.readFileSync(path.join(pwa, 'sw.js'), 'utf8');
+const walletsSource = fs.readFileSync(path.join(pwa, 'wallets.css'), 'utf8');
+const framingSource = fs.readFileSync(path.join(pwa, 'framing.css'), 'utf8');
+const referencedIds = [...appSource.matchAll(/\$\('([^']+)'\)/g)].map((match) => match[1]);
+const missingIds = [...new Set(referencedIds.filter((id) => !ids.includes(id)))];
+if (missingIds.length) failures.push(`JavaScript references missing HTML ids: ${missingIds.join(', ')}`);
+if (!html.includes('Content-Security-Policy')) failures.push('HTML CSP is missing');
+if (!appSource.includes('window.top !== window.self') || !appSource.includes("classList.add('app-context-verified')") || !framingSource.includes('html.app-context-verified')) failures.push('Framing protection is missing');
+if (!html.includes('property="og:image"')) failures.push('Open Graph image metadata is missing');
+if (!html.includes('images/bdkoin-brand.png') || !html.includes('https://gaebal2.github.io/BDKoin_Wallet/')) failures.push('Brand image or production deployment URL is missing');
+if (!appSource.includes('formatCompactUnits') || !appSource.includes("[12, 'T'], [9, 'B'], [6, 'M'], [3, 'K']") || !appSource.includes('visibleFraction')) failures.push('Adaptive compact balance formatting is missing');
+if ((html.match(/data-password-toggle=/g) || []).length < 5) failures.push('Password visibility toggles are missing');
+if (!html.includes('id="receiveQr"') || !appSource.includes('new QRCode(')) failures.push('Receive QR generation is missing');
+if (!html.includes('id="activeBdkSend"') || !html.includes('id="activeBdkReceive"')) failures.push('BDK asset actions are missing');
+if (!html.includes('id="pullRefresh"') || !appSource.includes('PULL_THRESHOLD')) failures.push('Pull-to-refresh is missing');
+if (html.includes('id="refreshBtn"')) failures.push('Redundant refresh button must not be shown');
+if (!html.includes('id="pullRefresh" class="pull-refresh hidden"')) failures.push('Pull-to-refresh must be hidden before CSS and JavaScript are ready');
+if (!appSource.includes('!deferredInstallPrompt')) failures.push('Install dialog must require a real browser install prompt');
+if (!appSource.includes("indexedDB.open(WALLET_DB, 1)")) failures.push('Durable IndexedDB wallet backup is missing');
+if (!appSource.includes('navigator.storage?.persist')) failures.push('Persistent browser storage request is missing');
+if (!html.includes('id="walletList"') || !html.includes('id="openAddWalletBtn"')) failures.push('Multi-wallet list and import controls are missing');
+if (!appSource.includes('version: 2, wallets, activeWalletId')) failures.push('Multi-wallet encrypted vault format is missing');
+if (!appSource.includes("['이름 변경', '', '']")) failures.push('Wallet editor action is missing');
+if (!appSource.includes("['이름 변경', '', '']") || !appSource.includes("requestTextInput('지갑 이름 변경'")) failures.push('Wallet rename control is missing');
+if (!html.includes('id="addWalletDialog"') || !html.includes('id="importName"')) failures.push('Independent wallet dialog or wallet name import is missing');
+if (!html.includes('ACTIVE WALLET') || !html.includes('id="editWalletsBtn"') || !html.includes('id="walletManagerDialog"')) failures.push('Active wallet card or wallet manager is missing');
+if (html.includes('class="asset-section"') || html.includes('class="quick-actions"')) failures.push('Legacy asset detail sections must stay removed');
+if (!appSource.includes('validateBdkTransfer') || !appSource.includes('formatCompactUnits(balances.sl, 18, 9)') || !appSource.includes('formatBdkBalance(balances.bdk)')) failures.push('BDK preflight or wallet-list BDK formatter is missing');
+if (!html.includes('id="historyList"') || !html.includes('id="historyPagination"') || !appSource.includes("data: 'fullList', type: 'Send'")) failures.push('Paginated transaction history is missing');
+if (!appSource.includes('normalizeBalance') || !appSource.includes('nextBody.set')) failures.push('Decimal BDK balances or history look-ahead are not handled');
+if (!appSource.includes('removeWallet') || !appSource.includes('syncDialogScrollLock')) failures.push('Per-wallet deletion or dialog scroll locking is missing');
+if (!appSource.includes('formatDisplayUnits') || !appSource.includes('submitTransaction') || !html.includes('id="transferSuccessDialog"')) failures.push('Exact grouped amounts or resilient transfer completion UI is missing');
+if (!appSource.includes('Promise.any(requests)') || !appSource.includes('result.data ?? {}') || !appSource.includes("'받는 주소' : '보낸 주소'")) failures.push('Resilient empty history handling or counterparty labels are missing');
+if (!html.includes('id="transferReviewDialog"') || !appSource.includes('confirmTransfer') || !appSource.includes('formatAmountInput') || !appSource.includes('const transactionAmount = amount;') || !appSource.includes('parseTokenUnits(balanceResult.data.balance, token.decimal)')) failures.push('Custom transfer review, grouped input, or BDK contract base units are missing');
+if (!html.includes('app.js?v=bdk1') || !appSource.includes("sw.js?v=bdk1") || !swSource.includes("cache: 'reload'")) failures.push('Versioned app assets or forced service-worker refresh are missing');
+if (!html.includes('id="appAlertDialog"') || !appSource.includes('isInvalidBdkTransferAmount') || !appSource.includes('BDK는 소수점 18자리까지 전송할 수 있습니다.')) failures.push('BDK decimal validation is missing');
+if (!html.includes('id="transferReviewFee"') || !appSource.includes('estimatedFee') || !appSource.includes('history-fee') || !appSource.includes("'bdk-token-icon.svg' : 'sl-token-icon.png'")) failures.push('Transfer fee preview or token-aware history is missing');
+if (!html.includes('id="dangerConfirmDialog"') || !appSource.includes('confirmDanger') || appSource.includes('if (!confirm(`${wallet.name}')) failures.push('Custom wallet deletion confirmation is missing');
+if (!html.includes('id="uninstallGuideDialog"') || !html.includes('id="uninstallGuideBackup"') || !appSource.includes("$('uninstallGuideDelete').onclick")) failures.push('App removal and storage guidance is missing');
+if (!appSource.includes('const closeUninstallGuide') || !appSource.includes('formatDisplayUnits(balances.bdk, token.decimal)')) failures.push('Settings return flow or exact active BDK display is missing');
+if (!html.includes('class="orb small unlock-orb"') || !html.includes('class="active-wallet-name-row"') || !html.includes('class="hero-balance-icon bdk-balance-icon"')) failures.push('Unlock icon or active wallet layout refinement is missing');
+if (!html.includes('id="textInputDialog"') || !html.includes('id="backupConfirmDialog"') || !html.includes('id="privateKeyDialog"') || !appSource.includes('requestTextInput') || !appSource.includes('confirmPrivateKeyBackup')) failures.push('Custom rename or private-key backup dialogs are missing');
+if (!appSource.includes("DEFAULT_BDK_CID = 'fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0'")) failures.push('Default BDK CID is missing');
+if (!html.includes('images/bdk-token-icon.svg') || !swSource.includes('images/bdk-token-icon.svg')) failures.push('Aligned vector BDK icon is missing');
+if (!appSource.includes('event.stopPropagation()') || !walletsSource.includes('-webkit-tap-highlight-color: transparent')) failures.push('Wallet copy tap target isolation is missing');
+if (/\b(?:window\.)?(?:alert|confirm|prompt)\s*\(/.test(appSource.replace(/promptEvent\.prompt\s*\(/g, ''))) failures.push('Browser-native app dialogs are still in use');
+if (!appSource.includes('parseTokenUnits') || !appSource.includes('keep SL and history available')) failures.push('Token balance parsing or refresh isolation is missing');
+if (!appSource.includes('function generatePrivateKey()') || !appSource.includes('crypto.getRandomValues(new Uint8Array(32))')) failures.push('Cryptographically secure private-key generation is missing');
+if (!html.includes('id="sendForm" autocomplete="off"') || !html.includes('id="amount" inputmode="decimal" placeholder="0" autocomplete="off" autocorrect="off"')) failures.push('Transfer amount suggestions are not disabled');
+if (!appSource.includes('function disableInputSuggestions(root = document)') || !appSource.includes("input:not([type=\"checkbox\"])") || !appSource.includes("setAttribute('aria-autocomplete', 'none')") || !appSource.includes('new MutationObserver(')) failures.push('Global input suggestion suppression is missing');
+if (!html.includes('id="toast" class="toast" role="status" aria-live="polite" popover="manual"') || !appSource.includes('toastElement.showPopover()')) failures.push('Toast top-layer presentation is missing');
+if (!html.includes('id="createWalletName"') || !appSource.includes("makeWallet(generatePrivateKey(), $('createWalletName').value.trim())")) failures.push('New wallet name input is missing');
+if (!appSource.includes('waitForExplorerTransaction') || !appSource.includes("showTransferStatus('processing'") || !appSource.includes("showTransferStatus('success'") || !appSource.includes("showTransferStatus('failed'")) failures.push('Explorer-confirmed transfer status flow is missing');
+if (!appSource.includes('PENDING_TRANSFERS_KEY') || !appSource.includes("showTransferStatus('pending'") || !appSource.includes('transferInFlight')) failures.push('Ambiguous transfer or duplicate submission protection is missing');
+if (!appSource.includes('rebroadcastPendingTransfer') || !appSource.includes('동일 해시 다시 전파') || !appSource.includes('signed,') || !walletsSource.includes('.pending-rebroadcast')) failures.push('Pending transfer rebroadcast controls are missing');
+if (!appSource.includes('transactionTimestampExpired') || !appSource.includes("status: 'expired'") || !appSource.includes('새 거래 작성') || !walletsSource.includes('.pending-transfer.expired')) failures.push('Expired transfer replacement flow is missing');
+if (!appSource.includes("showTransferStatus('pending', `네트워크가 전송을 접수했지만") || !appSource.includes("refreshHistory(1);\n          return;")) failures.push('Pending transfers are not rendered immediately');
+if (!appSource.includes('https://explorer.saseul.com/?ic=tx&h=')) failures.push('Explorer transaction links are missing');
+if (!html.includes('id="activeBdkSend"') || !html.includes('id="activeSlReceive"')) failures.push('Active wallet asset actions are missing');
+if (html.includes('\uFFFD') || html.includes('釉') || html.includes('吏')) failures.push('HTML appears to contain mojibake');
+
+if (failures.length) {
+  console.error(failures.map((failure) => `✗ ${failure}`).join('\n'));
+  process.exit(1);
+}
+console.log('✓ PWA files, JavaScript, manifest, references, IDs, CSP, and encoding validated');

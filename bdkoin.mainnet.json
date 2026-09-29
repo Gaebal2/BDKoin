@@ -1,0 +1,9 @@
+{
+  "endpoint": "https://main.saseul.net",
+  "address": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+  "space": "BDKOIN_PEACE_NETWORK",
+  "name": "BDKoin",
+  "symbol": "BDK",
+  "supply": "2491000000",
+  "decimals": 18
+}

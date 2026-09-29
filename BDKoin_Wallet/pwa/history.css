@@ -1,0 +1,18 @@
+.history-icon {
+  overflow: hidden;
+  background:#17140f;
+  border:1px solid var(--line);
+}
+
+.history-icon img {
+  width: 22px;
+  height: 22px;
+  max-width: calc(100% - 8px);
+  max-height: calc(100% - 8px);
+  object-fit: contain;
+}
+
+.history-fee {
+  color:var(--muted);
+  font-size: 10px;
+}

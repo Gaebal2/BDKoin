@@ -1,0 +1,52 @@
+{
+  "id": "./",
+  "name": "BDKoin Wallet",
+  "short_name": "BDKoin",
+  "description": "BDKoin 전용 지갑 · Art for Peace & Children",
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "categories": [
+    "finance",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icons/bdkoin-app.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "지갑 열기",
+      "short_name": "열기",
+      "url": "./",
+      "icons": [
+        {
+          "src": "icons/bdkoin-app.png",
+          "sizes": "1254x1254",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    }
+  ]
+}

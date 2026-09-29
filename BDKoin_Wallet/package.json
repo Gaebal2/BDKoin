@@ -1,0 +1,19 @@
+{
+  "name": "bdkoin-wallet",
+  "version": "1.0.0",
+  "description": "BDKoin Peace Token wallet for SASEUL mainnet",
+  "private": false,
+  "scripts": {
+    "start": "node pwa/server.js",
+    "dev": "node pwa/server.js",
+    "wallet": "node pwa/server.js",
+    "test": "node scripts/validate-pwa.js && node scripts/test-bdk-units.cjs && node scripts/test-backup.cjs && node scripts/test-i18n.cjs && node scripts/test-pwa-update.cjs"
+  },
+  "dependencies": {
+    "config-ini-parser": "^1.6.1",
+    "path": "^0.12.7",
+    "prompt-sync": "^4.2.0",
+    "qrcodejs": "1.0.0",
+    "saseul": "^2.7.14"
+  }
+}

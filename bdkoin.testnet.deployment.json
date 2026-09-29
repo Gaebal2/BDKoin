@@ -1,0 +1,114 @@
+{
+  "network": "testnet",
+  "endpoint": "https://test.saseul.net",
+  "address": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+  "cid": "fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0",
+  "space": "BDKOIN_PEACE_NETWORK",
+  "name": "BDKoin",
+  "symbol": "BDK",
+  "supply": "2491000000",
+  "decimals": 18,
+  "baseUnits": "2491000000000000000000000000",
+  "transactions": [
+    {
+      "label": "Faucet",
+      "hash": "065c954bd5db8874cd4a023682cc91f0cf35bc8ffb620601b91225deeefba223a9fd72f4b6f747",
+      "submittedAt": "2026-09-29T01:42:30.466Z",
+      "status": "confirmed",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c954bd5db8874cd4a023682cc91f0cf35bc8ffb620601b91225deeefba223a9fd72f4b6f747"
+      },
+      "chainLookup": {
+        "code": 200,
+        "data": {
+          "transaction": {
+            "type": "Faucet",
+            "from": "b3709416c74988580a04f7c993adaa344cca212cacd7",
+            "timestamp": 1790646152453000
+          },
+          "public_key": "8fd76027a73e75edb13bd02673d7d034cea2d6c759df2c8150db8bc82909457e",
+          "signature": "f681dd0ed8f4bb11eaa4709fe5d65816b379c3f08dcb42bb2da7954f9530c2c030653e53a3718b5c133301c3de1300bdf52400c490cd98ecd60c707fd074cf05"
+        }
+      }
+    },
+    {
+      "label": "Publish:Mint",
+      "hash": "065c954c184f4000bc6984cec36687a51d5edd407fabb6511e5430198423a646c9605275e743dc",
+      "submittedAt": "2026-09-29T01:42:34.818Z",
+      "status": "accepted",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c954c184f4000bc6984cec36687a51d5edd407fabb6511e5430198423a646c9605275e743dc"
+      },
+      "chainLookup": {
+        "code": 200,
+        "data": []
+      }
+    },
+    {
+      "label": "Publish:Mint",
+      "hash": "065c9555bfc2a8d21228ae3e6ba4d7209f0d4500076e5d4e7fb2f25aa3f239df758f9c76b787f5",
+      "submittedAt": "2026-09-29T01:45:16.788Z",
+      "status": "accepted",
+      "response": {
+        "code": 200,
+        "data": "Transaction is added: 065c9555bfc2a8d21228ae3e6ba4d7209f0d4500076e5d4e7fb2f25aa3f239df758f9c76b787f5"
+      },
+      "chainLookup": {
+        "code": 200,
+        "data": []
+      }
+    },
+    {
+      "label": "Publish:Mint",
+      "hash": "065c9559661a101e90e765a9fa9ed167dcb2808df283adbb6df6f6c41b0143400f67d39063b104",
+      "submittedAt": "2026-09-29T01:46:18.022Z",
+      "status": "accepted",
+      "response": {
+        "endpoint": "https://test.saseul.net",
+        "code": 200,
+        "data": "Transaction is added: 065c9559661a101e90e765a9fa9ed167dcb2808df283adbb6df6f6c41b0143400f67d39063b104"
+      },
+      "chainLookup": {
+        "code": 200,
+        "data": []
+      }
+    }
+  ],
+  "lastInspection": {
+    "at": "2026-09-29T01:48:08.589Z",
+    "node": {
+      "code": 200,
+      "data": {
+        "status": "is_running",
+        "version": "2.2.0.3",
+        "mining": true,
+        "last_block": {
+          "height": 865826,
+          "s_timestamp": 1790646153000000,
+          "previous_blockhash": "065c80a2ca4c402c6f1add586ceeae323fe91339db670f3c6f69f955245cdedf3592c03e2c06d6",
+          "blockhash": "065c954bde3440fd9ced1fe24f6a825748be98c65217a4617f740b61eba81d7a2321eed402683b",
+          "transaction_count": 1
+        },
+        "last_resource_block": {
+          "height": 1342312,
+          "blockhash": "065c955845ffcb4c8edc2c175343077d6684bcf3459ecd25f197e9e7165959c00fb96edc20b6a1",
+          "previous_blockhash": "065c95576cbdc5ea77b60ead4723fe096fb831b66072382723da3fa465f9af724b8ac8dee399cb",
+          "nonce": "6e30ca26030e6c7312d03913ba14180210ca31c4ccd49672000000000040c358",
+          "timestamp": 1790646361128907,
+          "difficulty": "22260002",
+          "main_height": 865826,
+          "main_blockhash": "065c954bde3440fd9ced1fe24f6a825748be98c65217a4617f740b61eba81d7a2321eed402683b",
+          "validator": "20d9384f65c00e24db384ec948a47721f2b6eee369cd",
+          "miner": "6a6145db6a11990bbde269207b71f475727274106626",
+          "receipt_count": 0
+        }
+      }
+    },
+    "mintCode": {
+      "code": 999,
+      "msg": ""
+    }
+  }
+}

@@ -1,0 +1,201 @@
+.safe-scroll-dialog {
+  /* Keep the entire popup inside Safari's visible area, including safe insets. */
+  --popup-height: 100vh;
+  --popup-top: calc(16px + env(safe-area-inset-top, 0px));
+  --popup-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  position: fixed;
+  inset: var(--popup-top) calc(14px + env(safe-area-inset-right, 0px)) var(--popup-bottom) calc(14px + env(safe-area-inset-left, 0px));
+  width: auto;
+  max-width: 480px;
+  max-height: calc(var(--popup-height) - var(--popup-top) - var(--popup-bottom));
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-padding-block: 24px;
+}
+
+@supports (height: 100svh) {
+  .safe-scroll-dialog { --popup-height: 100svh; }
+}
+
+@supports (height: 100dvh) {
+  .safe-scroll-dialog { --popup-height: 100dvh; }
+}
+
+.safe-scroll-dialog::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.safe-scroll-dialog .sheet-head { gap: 12px; }
+.safe-scroll-dialog .close { flex: none; }
+
+.toast[popover] {
+  inset: auto auto max(24px, env(safe-area-inset-bottom)) 50%;
+  margin: 0;
+  border:0;
+}
+
+.orb:not(.unlock-orb) img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.balance-card::after {
+  content: "BDK";
+  right: -24px;
+  font-size: 116px;
+}
+
+/* Stacked actions outside the existing grid/flex button groups. */
+dialog > .button + .button,
+dialog > form > .button + .button {
+  margin-top: 10px;
+}
+
+#uninstallGuideBtn {
+  margin-bottom: 0;
+}
+
+#unlock > [data-restore-backup] {
+  margin-top: 14px;
+}
+
+#unlock > [data-restore-backup] + .text-button {
+  margin-top: 10px;
+}
+
+
+#deviceBackupSave {
+  margin-top: 14px;
+}
+
+
+.language-toggle,
+.language-toggle:hover,
+.language-toggle:active {
+  flex: none;
+  width: 42px;
+  height: 38px;
+  padding: 0;
+  border:0;
+  border-radius: 12px;
+  background:#17140fb8;
+  color:var(--ink);
+  box-shadow:0 4px 14px #31395412;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-toggle:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+html[lang="en"] .button { overflow-wrap: anywhere; }
+html[lang="en"] .active-card-actions button { min-height: 48px; }
+
+@media (max-width: 440px) {
+  .topbar { height: auto; min-height: 82px; flex-wrap: wrap; gap: 10px; padding-block: 14px; }
+  .header-actions { margin-left: auto; }
+}
+
+.language-toggle.korean-label { font-size: 10px; }
+#cid { box-sizing: border-box; width: 100%; resize: none; overflow-wrap: anywhere; word-break: break-all; font: 12px/1.6 monospace; padding: 12px; border:1px solid #473925; border-radius: 12px; background:#17140f; color:var(--ink); }
+.backup-status-card, .wallet-edit-button { --status-tint: #fff0f0; --status-color: #a12626; --status-border: #efc4c4; }
+.backup-status-card { margin: 16px 0 12px; padding: 17px 16px; border:1px solid var(--status-border); border-radius: 16px; background:var(--status-tint); }
+.backup-status-card.backup-good, .wallet-edit-button.backup-good { --status-tint: #edf8f1; --status-color: #17613b; --status-border: #b7ddc6; }
+.backup-status-card.backup-stale, .wallet-edit-button.backup-stale { --status-tint: #fff8e1; --status-color: #735200; --status-border: #ebd48d; }
+.wallet-edit-button { display: inline-flex; align-items: center; gap: 6px; background:var(--status-tint); color:var(--status-color); border-color:var(--status-border); white-space: nowrap; }
+.wallet-edit-button .backup-status-icon { flex: 0 0 18px; width: 18px; height: 18px; font-size: 12px; }
+.backup-status-message { display: flex; align-items: center; gap: 12px; color:var(--status-color); text-align: left; }
+.backup-status-icon { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 50%; background:var(--status-color); color:#fff; font-size: 20px; font-weight: 850; }
+.backup-status-title { display: block; font-size: 14px; font-weight: 850; }
+.backup-status-description { margin: 5px 0 0; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.backup-status-action { margin-top: 14px; background:var(--status-color); color:#fff; box-shadow:none; min-height: 46px; padding: 12px 16px; font-size: 13px; }
+.backup-status-action:hover { filter: brightness(1.08); }
+.backup-status-action:focus-visible { outline: 3px solid var(--status-color); outline-offset: 3px; }
+.private-key-entry { text-align: left; padding: 14px 0; border-bottom: 1px solid #d9dce5; }
+.private-key-address { display: block; overflow-wrap: anywhere; font-size: 11px; margin-top: 8px; }
+.private-key-entry .private-key-box { margin: 10px 0 0; }
+#backupFileName { overflow-wrap: anywhere; }
+.app-alert-details { text-align: left; font-size: 13px; line-height: 1.6; }
+.app-alert-details dt { margin-top: 14px; font-weight: 800; }
+.app-alert-details dd { margin: 4px 0 0; overflow-wrap: anywhere; color:var(--muted); }
+
+/* Share the primary button palette across all purple action buttons. */
+.button.primary,
+.wallet-choose-button:not(:disabled),
+.wallet-address button,
+.bdk-send-action,
+.bdk-receive-action {
+  background:linear-gradient(135deg, var(--violet), var(--violet-dark));
+  color:#fff;
+  border-color:transparent;
+}
+.bdk-send-action,
+.bdk-receive-action { color:#fff !important; }
+.active-card-actions button { background:linear-gradient(135deg, #493b7c, #322855); color:#f4f0ff; border-color:#7865aa66; }
+.active-card-actions button:hover { background:linear-gradient(135deg, #55458e, #3d3066); }
+.wallet-choose-button:disabled { white-space: normal; }
+
+#createDialog .auth-form,
+#importDialog .auth-form { margin: 0; padding: 0; border:0; background:transparent; box-shadow:none; }
+#importForm > button[type="submit"] { margin-top: 20px; }
+#importForm .sheet-head { gap: 12px; margin-bottom: 16px; }
+#importForm .sheet-head .close { flex: none; }
+
+/* Explicit colors avoid invisible native control text in Safari dark mode/autofill. */
+#settingsDialog input, #settingsDialog textarea {
+  color:#eee3d0;
+  -webkit-text-fill-color:#eee3d0;
+  caret-color:#eee3d0;
+  background-color:#17140f;
+  opacity: 1;
+  font-size: 16px;
+  line-height: 1.5;
+  min-width: 0;
+}
+#settingsDialog #cid { font-size: 14px; min-height: 90px; }
+#deviceBackupVerify { margin-top: 10px; }
+
+.backup-steps { display: flex; list-style: none; padding: 0; margin: 8px 0 24px; }
+.backup-steps li { position: relative; flex: 1; text-align: center; min-width: 0; }
+.backup-steps li:not(:last-child)::after { content: ""; position: absolute; top: 17px; left: calc(50% + 18px); width: calc(100% - 36px); height: 2px; background:#17140f; }
+.backup-steps span { display: grid; place-items: center; width: 36px; height: 36px; margin: 0 auto 8px; border-radius: 50%; background:#17140f; color:#b3a48d; font-weight: 700; }
+.backup-steps [aria-current="step"] span { background:#1766dc; color:white; }
+.backup-steps strong, .backup-steps small { display: block; padding: 0 4px; }
+.backup-steps small { margin-top: 4px; font-size: 11px; line-height: 1.5; word-break: keep-all; }
+
+.dialog-close-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+#uninstallGuideDialog .dialog-close-row .close { flex: none; }
+#walletManagerDialog > * { margin-top: 0; margin-bottom: 0; }
+#walletManagerDialog > * + * { margin-top: 12px; }
+#walletManagerDialog > .wallet-list { gap: 12px; }
+#restoreBackupSummary h3 { margin: 0 0 12px; font-size: 14px; }
+#restoreBackupWalletNames { white-space: pre-line; overflow-wrap: anywhere; line-height: 1.8; }
+.backup-navigation { display: flex; gap: 10px; margin-top: 12px; }
+.backup-navigation > .button { flex: 1; min-width: 0; margin: 0; }
+
+/* Keep close controls circular even in narrow Safari dialog headers. */
+.close {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  flex: 0 0 36px;
+  width: 36px;
+  min-width: 36px;
+  max-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  max-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
