@@ -26,14 +26,14 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/bdkoin-app-v2.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/bdkoin-app-v2.png">
-  <link rel="stylesheet" href="framing.css?v=bdk12">
-  <link rel="stylesheet" href="styles.css?v=bdk12">
-  <link rel="stylesheet" href="wallets.css?v=bdk12">
-  <link rel="stylesheet" href="install.css?v=bdk12">
-  <link rel="stylesheet" href="history.css?v=bdk12">
-  <link rel="stylesheet" href="overlays.css?v=bdk12">
+  <link rel="stylesheet" href="framing.css?v=bdk13">
+  <link rel="stylesheet" href="styles.css?v=bdk13">
+  <link rel="stylesheet" href="wallets.css?v=bdk13">
+  <link rel="stylesheet" href="install.css?v=bdk13">
+  <link rel="stylesheet" href="history.css?v=bdk13">
+  <link rel="stylesheet" href="overlays.css?v=bdk13">
   <title>BDK Wallet · Art for Peace & Children</title>
-  <link rel="stylesheet" href="bdk-theme.css?v=bdk12">
+  <link rel="stylesheet" href="bdk-theme.css?v=bdk13">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -172,7 +172,11 @@
     <form id="settingsForm" method="dialog">
       <div class="sheet-head"><div><p class="eyebrow">PREFERENCES</p><h2 id="settingsTitle">네트워크 설정</h2></div><button id="settingsClose" class="close" type="button" aria-label="닫기">×</button></div>
       <label for="endpoint">RPC 엔드포인트</label><input id="endpoint" type="url" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="none" required>
-      <label for="cid">토큰 CID</label><textarea id="cid" rows="3" readonly translate="no"></textarea>
+      <div class="token-selector" role="group" aria-label="토큰 선택">
+        <button type="button" data-token="BDK" aria-pressed="true">BDK 토큰</button>
+        <button type="button" data-token="PSL" aria-pressed="false">PSL 토큰</button>
+      </div>
+      <label for="cid">CID</label><textarea id="cid" rows="3" readonly translate="no"></textarea>
       <p class="helper">신뢰하는 HTTPS RPC만 사용하세요. 변경한 RPC는 자동 저장됩니다.</p>
       <div class="settings-divider"></div>
       <button id="uninstallGuideBtn" class="button secondary" type="button">앱 제거 · 저장소 안내</button>
@@ -364,8 +368,8 @@
   <script src="vendor/axios.min.js"></script>
   <script src="vendor/qrcode.min.js"></script>
   <script src="vendor/saseul.min.js"></script>
-  <script src="backup.js?v=bdk12"></script>
-  <script src="i18n.js?v=bdk12"></script>
-  <script src="app.js?v=bdk12"></script>
+  <script src="backup.js?v=bdk13"></script>
+  <script src="i18n.js?v=bdk13"></script>
+  <script src="app.js?v=bdk13"></script>
 </body>
 </html>

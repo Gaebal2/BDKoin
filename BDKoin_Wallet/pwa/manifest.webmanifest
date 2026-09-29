@@ -7,6 +7,10 @@
   "dir": "ltr",
   "start_url": "./",
   "scope": "./",
+  "related_applications": [
+    { "platform": "webapp", "url": "./manifest.webmanifest" }
+  ],
+  "prefer_related_applications": false,
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",

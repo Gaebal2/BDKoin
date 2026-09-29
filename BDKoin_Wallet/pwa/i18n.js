@@ -1,6 +1,17 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
+BDK 토큰|BDK token
+PSL 토큰|PSL token
+토큰 선택|Select token
+PSL 보내기|Send PSL
+PSL 받기|Receive PSL
+↗ PSL 보내기|↗ Send PSL
+↙ PSL 받기|↙ Receive PSL
+SL · PSL 거래 이력|SL · PSL transaction history
+전송이 완료된 뒤 토큰을 변경해 주세요.|Change tokens after the transfer is complete.
+설정을 저장하지 못했습니다.|Could not save settings.
+Chrome 또는 삼성 인터넷 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요. 앱 안의 브라우저라면 외부 브라우저로 열어 주세요.|In Chrome or Samsung Internet, choose Install app or Add to Home screen from the menu. If using an in-app browser, open this page in an external browser.
 SASEUL 메인넷|SASEUL Mainnet
 SASEUL 테스트넷|SASEUL Testnet
 상세|Details

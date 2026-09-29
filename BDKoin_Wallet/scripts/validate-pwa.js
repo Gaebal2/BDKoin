@@ -48,7 +48,7 @@ if (!html.includes('id="activeBdkSend"') || !html.includes('id="activeBdkReceive
 if (!html.includes('id="pullRefresh"') || !appSource.includes('PULL_THRESHOLD')) failures.push('Pull-to-refresh is missing');
 if (html.includes('id="refreshBtn"')) failures.push('Redundant refresh button must not be shown');
 if (!html.includes('id="pullRefresh" class="pull-refresh hidden"')) failures.push('Pull-to-refresh must be hidden before CSS and JavaScript are ready');
-if (!appSource.includes('!deferredInstallPrompt')) failures.push('Install dialog must require a real browser install prompt');
+if (!appSource.includes('setTimeout(showInstallDialog, 500)')) failures.push('Mobile install guidance must run at startup');
 if (!appSource.includes("indexedDB.open(WALLET_DB, 1)")) failures.push('Durable IndexedDB wallet backup is missing');
 if (!appSource.includes('navigator.storage?.persist')) failures.push('Persistent browser storage request is missing');
 if (!html.includes('id="walletList"') || !html.includes('id="openAddWalletBtn"')) failures.push('Multi-wallet list and import controls are missing');
@@ -65,8 +65,8 @@ if (!appSource.includes('removeWallet') || !appSource.includes('syncDialogScroll
 if (!appSource.includes('formatDisplayUnits') || !appSource.includes('submitTransaction') || !html.includes('id="transferSuccessDialog"')) failures.push('Exact grouped amounts or resilient transfer completion UI is missing');
 if (!appSource.includes('Promise.any(requests)') || !appSource.includes('result.data ?? {}') || !appSource.includes("'받는 주소' : '보낸 주소'")) failures.push('Resilient empty history handling or counterparty labels are missing');
 if (!html.includes('id="transferReviewDialog"') || !appSource.includes('confirmTransfer') || !appSource.includes('formatAmountInput') || !appSource.includes('const transactionAmount = amount;') || !appSource.includes('parseTokenUnits(balanceResult.data.balance, token.decimal)')) failures.push('Custom transfer review, grouped input, or BDK contract base units are missing');
-if (!html.includes('app.js?v=bdk12') || !appSource.includes("sw.js?v=bdk12") || !swSource.includes("cache: 'reload'")) failures.push('Versioned app assets or forced service-worker refresh are missing');
-if (!html.includes('id="appAlertDialog"') || !appSource.includes('isInvalidBdkTransferAmount') || !appSource.includes('BDK는 소수점 18자리까지 전송할 수 있습니다.')) failures.push('BDK decimal validation is missing');
+if (!html.includes('app.js?v=bdk13') || !appSource.includes("sw.js?v=bdk13") || !swSource.includes("cache: 'reload'")) failures.push('Versioned app assets or forced service-worker refresh are missing');
+if (!html.includes('id="appAlertDialog"') || !appSource.includes('isInvalidBdkTransferAmount') || !appSource.includes('${token.symbol}는 소수점 ${token.decimal}자리까지 전송할 수 있습니다.')) failures.push('BDK decimal validation is missing');
 if (!html.includes('id="transferReviewFee"') || !appSource.includes('estimatedFee') || !appSource.includes('history-fee') || !appSource.includes("'bdkoin-brand.png' : 'sl-token-icon.png'")) failures.push('Transfer fee preview or token-aware history is missing');
 if (!html.includes('id="dangerConfirmDialog"') || !appSource.includes('confirmDanger') || appSource.includes('if (!confirm(`${wallet.name}')) failures.push('Custom wallet deletion confirmation is missing');
 if (!html.includes('id="uninstallGuideDialog"') || !html.includes('id="uninstallGuideBackup"') || !appSource.includes("$('uninstallGuideDelete').onclick")) failures.push('App removal and storage guidance is missing');

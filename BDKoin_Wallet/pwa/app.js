@@ -33,19 +33,21 @@
   const WALLET_STORE = 'wallet';
   const SL_SYSTEM_CID = '19bd191ea2da3fd599528b4b831206ec5cf958d6cdbea0188a22d7d44673dd58';
   const DEFAULT_BDK_CID = 'fbc5db686a22233f7b2130e73fc48b8bd5eae368098ce0cf7a6d4caecbc7f4a0';
-  const INSTALLED_KEY = 'bdk-wallet-installed-v1';
+  const TOKEN_CIDS = { BDK: DEFAULT_BDK_CID, PSL: 'dbd6217ffd83c29c077571c5be8eb945418f6cef27ab4ba92f378acb6a1d0080' };
+  let installedThisSession = false;
+  let tokenRevision = 0;
   const PENDING_TRANSFERS_KEY = 'bdk-wallet-pending-transfers-v1';
   const AUTO_LOCK_MS = 5 * 60 * 1000;
   const defaults = { endpoint: 'https://main.saseul.net', owner: 'b3709416c74988580a04f7c993adaa344cca212cacd7', space: 'BDKOIN_PEACE_NETWORK', cid: DEFAULT_BDK_CID };
   let config = readJson(CONFIG_KEY, defaults);
   if (typeof config.endpoint !== 'string' || !config.endpoint.trim()) config.endpoint = defaults.endpoint;
-  config.cid = DEFAULT_BDK_CID; // This wallet always targets the deployed BDK contract.
+  config.cid = Object.values(TOKEN_CIDS).includes(config.cid) ? config.cid : DEFAULT_BDK_CID;
   let privateKey = '';
   let wallets = [];
   let activeWalletId = '';
   let vaultPassword = '';
   const walletBalances = new Map();
-  let token = { symbol: 'BDK', decimal: 18 };
+  let token = { symbol: config.cid === TOKEN_CIDS.PSL ? 'PSL' : 'BDK', decimal: 18 };
   let rawBalance = '0';
   let rawSlBalance = '0';
   let selectedAsset = 'BDK';
@@ -518,14 +520,18 @@
     $('privateKeyList').replaceChildren();
   }
 
-  function isInvalidBdkTransferAmount(value) {
-    try { return BigInt(parseUnits(value, 18)) <= 0n; }
+  function isInvalidBdkTransferAmount(value, decimals = 18) {
+    try { return BigInt(parseUnits(value, decimals)) <= 0n; }
     catch { return true; }
   }
 
-  function verifiedBdkInfo(info) {
-    if (info?.name !== 'BDKoin' || info?.symbol !== 'BDK' || Number(info?.decimal) !== 18) throw new Error('BDK 메인넷 토큰 정보를 확인할 수 없습니다.');
-    return { symbol: 'BDK', decimal: 18 };
+  function verifiedBdkInfo(info, symbol = 'BDK') {
+    const decimal = Number(info?.decimal);
+    if (info?.symbol !== symbol || info?.decimal == null || !Number.isInteger(decimal) || decimal < 0 || decimal > 18
+      || (symbol === 'BDK' && (info?.name !== 'BDKoin' || decimal !== 18))) {
+      throw new Error(symbol + ' 메인넷 토큰 정보를 확인할 수 없습니다.');
+    }
+    return { symbol, decimal };
   }
 
   async function validateBdkTransfer() {
@@ -537,9 +543,9 @@
       SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ cid, type: 'GetInfo' }, privateKey)),
       SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ cid, type: 'GetBalance', address: walletAddressValue }, privateKey))
     ]);
-    if (infoResult.code !== 200) throw new Error(`BDK 컨트랙트를 확인할 수 없습니다: ${rpcError(infoResult)}`);
-    if (balanceResult.code !== 200) throw new Error(`BDK 잔액을 확인할 수 없습니다: ${rpcError(balanceResult)}`);
-    token = verifiedBdkInfo(infoResult.data);
+    if (infoResult.code !== 200) throw new Error(`${token.symbol} 컨트랙트를 확인할 수 없습니다: ${rpcError(infoResult)}`);
+    if (balanceResult.code !== 200) throw new Error(`${token.symbol} 잔액을 확인할 수 없습니다: ${rpcError(balanceResult)}`);
+    token = verifiedBdkInfo(infoResult.data, token.symbol);
     rawBalance = parseTokenUnits(balanceResult.data.balance, token.decimal);
     return cid;
   }
@@ -547,9 +553,51 @@
   function applyConfig() {
     $('endpoint').value = config.endpoint;
     $('cid').value = config.cid;
+    renderTokenSelection();
     SASEUL.Rpc.endpoints([config.endpoint]);
     SASEUL.Rpc.timeout(12000);
   }
+
+  function renderTokenSelection() {
+    document.querySelectorAll('[data-token]').forEach(button => {
+      button.setAttribute('aria-pressed', String(TOKEN_CIDS[button.dataset.token] === config.cid));
+    });
+    $('bdkHeroSymbol').textContent = token.symbol;
+    $('activeBdkSend').textContent = '↗ ' + token.symbol + ' 보내기';
+    $('activeBdkReceive').textContent = '↙ ' + token.symbol + ' 받기';
+    $('historyTitle').textContent = 'SL · ' + token.symbol + ' 거래 이력';
+    document.querySelectorAll('.bdk-balance-icon').forEach(icon => { icon.hidden = token.symbol !== 'BDK'; });
+  }
+
+  function selectToken(symbol) {
+    const cid = TOKEN_CIDS[symbol];
+    if (!cid || cid === config.cid) return;
+    if (transferInFlight) return toast('전송이 완료된 뒤 토큰을 변경해 주세요.');
+    const next = { ...config, cid };
+    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(next)); }
+    catch { return toast('설정을 저장하지 못했습니다.'); }
+    config = next;
+    tokenRevision++;
+    token = { symbol, decimal: 18 };
+    walletBalances.clear();
+    historyRequestId++;
+    historyLoading = false;
+    historyPage = 1;
+    $('historyList').replaceChildren();
+    $('historyStatus').textContent = '';
+    $('historyPrev').disabled = true;
+    $('historyNext').disabled = true;
+    selectAsset('BDK');
+    ['sendPanel', 'receivePanel'].forEach(id => { if ($(id).open) $(id).close(); });
+    applyConfig();
+    updateActiveBalances(balanceState(activeWalletId));
+    renderWalletList();
+    if (privateKey) refresh();
+  }
+
+  document.querySelectorAll('[data-token]').forEach(button => {
+    button.onclick = () => selectToken(button.dataset.token);
+  });
 
   function showOnly(id) {
     ['onboarding', 'unlock', 'wallet'].forEach((view) => $(view).classList.toggle('hidden', view !== id));
@@ -737,6 +785,7 @@
   }
 
   async function fetchWalletBalance(wallet) {
+    const revision = tokenRevision;
     const walletAddressValue = walletAddress(wallet);
     const slRequest = SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({ type: 'GetBalance', address: walletAddressValue }, wallet.privateKey));
     const bdkRequest = (async () => {
@@ -747,6 +796,7 @@
       ]);
     })();
     const [slState, bdkState] = await Promise.allSettled([slRequest, bdkRequest]);
+    if (revision !== tokenRevision) return false;
     let sl = '0';
     let bdk = '0';
     let bdkError = true;
@@ -761,7 +811,7 @@
       const [infoResult, balanceResult] = bdkState.value;
       if (infoResult.code === 200 && balanceResult.code === 200) {
         try {
-          token = verifiedBdkInfo(infoResult.data);
+          token = verifiedBdkInfo(infoResult.data, token.symbol);
           bdk = parseTokenUnits(balanceResult.data.balance, token.decimal);
           bdkError = false;
           online = true;
@@ -775,6 +825,7 @@
   async function refresh() {
     if (!privateKey || isRefreshing) return;
     isRefreshing = true;
+    const revision = tokenRevision;
     $('connectionState').className = 'connection';
     $('connectionState').innerHTML = '<i></i> 연결 확인 중';
     wallets.forEach((wallet) => walletBalances.set(wallet.id, { ...balanceState(wallet.id), loading: true }));
@@ -784,11 +835,16 @@
       results = await Promise.all(wallets.map(async (wallet) => {
         try { return await fetchWalletBalance(wallet); }
         catch {
-          walletBalances.set(wallet.id, { sl: '0', bdk: '0', loading: false, error: true });
+          if (revision === tokenRevision) walletBalances.set(wallet.id, { sl: '0', bdk: '0', loading: false, error: true });
           return false;
         }
       }));
     } finally {
+      if (revision !== tokenRevision) {
+        isRefreshing = false;
+        refresh();
+        return;
+      }
       const balances = balanceState(activeWalletId);
       updateActiveBalances(balances);
       renderWalletList();
@@ -1029,11 +1085,11 @@
     const confirmedPending = allPending.filter(({ hash }) => confirmedHashes.has(hash));
     confirmedPending.forEach(({ hash }) => forgetPendingTransfer(hash));
     const pending = page === 1
-      ? allPending.filter((item) => item.walletAddress === currentAddress && !confirmedHashes.has(item.hash))
+      ? allPending.filter((item) => item.walletAddress === currentAddress && (!item.signed?.transaction?.cid || item.signed.transaction.cid === SL_SYSTEM_CID || item.signed.transaction.cid === bdkCid) && !confirmedHashes.has(item.hash))
       : [];
     pending.forEach((item) => renderPendingTransfer(container, item));
     if (!transactions.length && !pending.length) {
-      $('historyStatus').textContent = '표시할 SL · BDK 송수신 이력이 없습니다.';
+      $('historyStatus').textContent = `표시할 SL · ${token.symbol} 송수신 이력이 없습니다.`;
     } else {
       $('historyStatus').textContent = '';
       transactions.forEach(({ hash, transaction, signed, recordedFee }) => {
@@ -1049,7 +1105,8 @@
         const tokenIcon = document.createElement('img');
         tokenIcon.src = `images/${isBdk ? 'bdkoin-brand.png' : 'sl-token-icon.png'}`;
         tokenIcon.alt = `${symbol} 아이콘`;
-        icon.append(tokenIcon);
+        if (isBdk && symbol === 'PSL') icon.textContent = 'PSL';
+        else icon.append(tokenIcon);
         const details = document.createElement('div');
         details.className = 'history-details';
         const title = document.createElement('strong');
@@ -1202,7 +1259,7 @@
       return;
     }
     $('pullRefresh').className = 'pull-refresh visible refreshing';
-    $('pullRefreshLabel').textContent = 'SL · BDK 잔액 갱신 중';
+    $('pullRefreshLabel').textContent = `SL · ${token.symbol} 잔액 갱신 중`;
     await refresh();
     $('pullRefreshLabel').textContent = '잔액을 새로고침했습니다';
     resetPullIndicator(650);
@@ -1274,11 +1331,11 @@
   }
 
   function isStandalone() {
-    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    return ['standalone', 'minimal-ui', 'fullscreen', 'window-controls-overlay'].some(mode => window.matchMedia(`(display-mode: ${mode})`).matches) || window.navigator.standalone === true;
   }
 
   function isIos() {
-    return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
   }
 
   function updateInstallDialog() {
@@ -1291,27 +1348,37 @@
       $('installDescription').textContent = '홈 화면이나 바탕화면에서 앱처럼 빠르게 열 수 있습니다.';
       $('installBtn').textContent = '폰·바탕화면에 설치';
     } else {
-      $('installDescription').textContent = '브라우저 메뉴에서 앱 설치 또는 바로가기 만들기를 선택할 수 있습니다.';
+      $('installDescription').textContent = 'Chrome 또는 삼성 인터넷 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요. 앱 안의 브라우저라면 외부 브라우저로 열어 주세요.';
       $('installBtn').textContent = '설치 방법 확인';
     }
   }
 
-  function showInstallDialog() {
-    if (isStandalone() || localStorage.getItem(INSTALLED_KEY) || sessionStorage.getItem('bdk-install-dismissed') || !deferredInstallPrompt || $('installDialog').open) return;
+  async function showInstallDialog() {
+    if (isStandalone() || installedThisSession || sessionStorage.getItem('bdk-install-dismissed') || (!isIos() && !/android/i.test(navigator.userAgent) && !deferredInstallPrompt) || $('installDialog').open) return;
+    if (!deferredInstallPrompt && navigator.getInstalledRelatedApps) {
+      try {
+        const apps = await navigator.getInstalledRelatedApps();
+        const manifestUrl = new URL('./manifest.webmanifest', location.href).href;
+        if (apps.some(app => app.platform === 'webapp' && new URL(app.url, location.href).href === manifestUrl)) return;
+      } catch { /* Unsupported detection must not prevent installation guidance. */ }
+    }
+    if (isStandalone() || installedThisSession || sessionStorage.getItem('bdk-install-dismissed') || $('installDialog').open) return;
     updateInstallDialog();
+    if (document.querySelector('dialog[open]')) return;
     $('installDialog').showModal();
   }
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
+    installedThisSession = false;
     updateInstallDialog();
     setTimeout(showInstallDialog, 150);
   });
 
   window.addEventListener('appinstalled', () => {
     deferredInstallPrompt = null;
-    localStorage.setItem(INSTALLED_KEY, 'true');
+    installedThisSession = true;
     if ($('installDialog').open) $('installDialog').close();
     toast('Wallet을 설치했습니다.');
   });
@@ -1320,13 +1387,15 @@
     if (deferredInstallPrompt) {
       const promptEvent = deferredInstallPrompt;
       deferredInstallPrompt = null;
-      await promptEvent.prompt();
-      const choice = await promptEvent.userChoice;
-      if (choice.outcome === 'accepted') {
-        localStorage.setItem(INSTALLED_KEY, 'true');
-        $('installDialog').close();
-      }
-      else updateInstallDialog();
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        if (choice.outcome === 'accepted') {
+          installedThisSession = true;
+          $('installDialog').close();
+        }
+        else updateInstallDialog();
+      } catch { updateInstallDialog(); }
       return;
     }
     if (isIos()) {
@@ -1335,6 +1404,9 @@
     }
     toast('브라우저 메뉴의 “앱 설치” 또는 “바로가기 만들기”를 선택하세요.');
   };
+
+  $('installDialog').addEventListener('cancel', () => sessionStorage.setItem('bdk-install-dismissed', '1'));
+  document.addEventListener('close', () => setTimeout(showInstallDialog, 150), true);
 
   $('installLaterBtn').onclick = () => {
     sessionStorage.setItem('bdk-install-dismissed', '1');
@@ -1470,7 +1542,7 @@
     openPanel('receivePanel', 'BDK');
   };
   $('navSettings').onclick = () => $('settingsBtn').click();
-  $('balanceDetails').onclick = () => showAlert(formatDisplayUnits(rawBalance, 18) + ' BDK', '정확한 BDK 잔액');
+  $('balanceDetails').onclick = () => showAlert(formatDisplayUnits(rawBalance, token.decimal) + ` ${token.symbol}`, `정확한 ${token.symbol} 잔액`);
 
   $('activeBdkSend').onclick = () => openPanel('sendPanel', 'BDK');
   $('activeBdkReceive').onclick = () => openPanel('receivePanel', 'BDK');
@@ -1657,8 +1729,8 @@
     if (transferInFlight) return;
     $('sendError').textContent = '';
     const to = $('toAddress').value.trim();
-    if (selectedAsset !== 'SL' && isInvalidBdkTransferAmount($('amount').value)) {
-      await showAlert('BDK는 소수점 18자리까지 전송할 수 있습니다. 0보다 큰 수량을 입력해 주세요.', 'BDK 송금 수량 확인');
+    if (selectedAsset !== 'SL' && isInvalidBdkTransferAmount($('amount').value, token.decimal)) {
+      await showAlert(`${token.symbol}는 소수점 ${token.decimal}자리까지 전송할 수 있습니다. 0보다 큰 수량을 입력해 주세요.`, `${token.symbol} 송금 수량 확인`);
       return;
     }
     transferInFlight = true;
@@ -1692,7 +1764,7 @@
       const signed = SASEUL.Rpc.signedTransaction(transaction, privateKey);
       const fee = await estimateTransactionFee(signed);
       if (selectedAsset === 'SL' && BigInt(amount) + BigInt(fee) > BigInt(rawSlBalance)) throw new Error('SL 수량과 네트워크 수수료를 합한 금액이 잔액을 초과합니다.');
-      if (selectedAsset !== 'SL' && BigInt(fee) > BigInt(rawSlBalance)) throw new Error(`BDK 전송 수수료 ${formatSlFee(fee)}를 낼 SL 잔액이 부족합니다.`);
+      if (selectedAsset !== 'SL' && BigInt(fee) > BigInt(rawSlBalance)) throw new Error(`${token.symbol} 전송 수수료 ${formatSlFee(fee)}를 낼 SL 잔액이 부족합니다.`);
       if (!await confirmTransfer(displayAmount, symbol, to, fee)) return;
       setLoading($('sendBtn'), true, '검토 후 전송');
       $('sendPanel').close();
@@ -2052,6 +2124,7 @@
       toast('보안을 위해 기존 평문 키를 제거했습니다. 백업 키를 다시 가져와 주세요.');
     }
     showOnly(walletVault ? 'unlock' : 'onboarding');
+    setTimeout(showInstallDialog, 500);
   }
 
   start();
@@ -2071,7 +2144,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk12', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk13', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});
