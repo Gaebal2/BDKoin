@@ -26,14 +26,14 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/bdkoin-app-v2.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/bdkoin-app-v2.png">
-  <link rel="stylesheet" href="framing.css?v=bdk9">
-  <link rel="stylesheet" href="styles.css?v=bdk9">
-  <link rel="stylesheet" href="wallets.css?v=bdk9">
-  <link rel="stylesheet" href="install.css?v=bdk9">
-  <link rel="stylesheet" href="history.css?v=bdk9">
-  <link rel="stylesheet" href="overlays.css?v=bdk9">
+  <link rel="stylesheet" href="framing.css?v=bdk10">
+  <link rel="stylesheet" href="styles.css?v=bdk10">
+  <link rel="stylesheet" href="wallets.css?v=bdk10">
+  <link rel="stylesheet" href="install.css?v=bdk10">
+  <link rel="stylesheet" href="history.css?v=bdk10">
+  <link rel="stylesheet" href="overlays.css?v=bdk10">
   <title>BDK Wallet · Art for Peace & Children</title>
-  <link rel="stylesheet" href="bdk-theme.css?v=bdk9">
+  <link rel="stylesheet" href="bdk-theme.css?v=bdk10">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -44,7 +44,7 @@
     <header class="topbar">
       <a class="brand" href="./" aria-label="BDK Wallet 홈">
         <img class="brand-mark" src="icons/bdkoin-app-v2.png" alt="">
-        <span><small>SASEUL BLOCK CHAIN</small><strong>BDK Wallet</strong></span>
+        <span><small>SASEUL BLOCK CHAIN</small><strong>BDK Wallet</strong></span><span id="networkBadge" class="network-badge">SASEUL 메인넷</span>
       </a>
       <div class="header-actions">
         <span id="connectionState" class="connection"><i></i> 연결 확인 중</span>
@@ -87,7 +87,7 @@
 
       <section id="wallet" class="dashboard hidden">
         <section class="balance-card" aria-labelledby="portfolioLabel">
-          <div class="peace-card-heading"><span id="portfolioLabel">PEACE BALANCE</span><div class="card-header-actions"><span id="networkBadge" class="network-badge">SASEUL 메인넷</span><button id="editWalletsBtn" class="wallet-edit-button backup-missing" type="button"><span id="editWalletsStatusIcon" class="backup-status-icon" role="img" aria-label="경고">!</span><span>지갑 편집</span></button></div></div>
+          <div class="peace-card-heading"><span id="portfolioLabel">PEACE BALANCE</span><div class="card-header-actions"><button id="editWalletsBtn" class="wallet-edit-button backup-missing" type="button"><span id="editWalletsStatusIcon" class="backup-status-icon" role="img" aria-label="경고">!</span><span>지갑 편집</span></button></div></div>
           <div class="wallet-context card-wallet-context">
             <strong id="activeWalletName" class="active-wallet-name">지갑 1</strong>
             <code id="accountAddress"></code>
@@ -364,8 +364,8 @@
   <script src="vendor/axios.min.js"></script>
   <script src="vendor/qrcode.min.js"></script>
   <script src="vendor/saseul.min.js"></script>
-  <script src="backup.js?v=bdk9"></script>
-  <script src="i18n.js?v=bdk9"></script>
-  <script src="app.js?v=bdk9"></script>
+  <script src="backup.js?v=bdk10"></script>
+  <script src="i18n.js?v=bdk10"></script>
+  <script src="app.js?v=bdk10"></script>
 </body>
 </html>

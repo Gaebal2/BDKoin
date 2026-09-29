@@ -942,7 +942,15 @@
     const addressText = document.createElement('small');
     addressText.className = 'history-counterparty';
     addressText.textContent = `받는 주소: ${item.to}`;
-    details.append(title, addressText);
+    const addressRow = document.createElement('div');
+    addressRow.className = 'history-address-row';
+    const copyButton = document.createElement('button');
+    copyButton.type = 'button';
+    copyButton.className = 'history-copy-button';
+    copyButton.textContent = '복사';
+    copyButton.onclick = () => copy(item.to, copyButton);
+    addressRow.append(addressText, copyButton);
+    details.append(title, addressRow);
     const value = document.createElement('div');
     value.className = 'history-value';
     const amount = document.createElement('strong');
@@ -1052,7 +1060,18 @@
           ? `${sent ? '받는 주소' : '보낸 주소'}: ${counterparty}`
           : `${sent ? '받는 주소' : '보낸 주소'}: 알 수 없음`;
         if (counterparty) addressText.title = counterparty;
-        details.append(title, addressText);
+        const addressRow = document.createElement('div');
+        addressRow.className = 'history-address-row';
+        addressRow.append(addressText);
+        if (counterparty) {
+          const copyButton = document.createElement('button');
+          copyButton.type = 'button';
+          copyButton.className = 'history-copy-button';
+          copyButton.textContent = '복사';
+          copyButton.onclick = () => copy(counterparty, copyButton);
+          addressRow.append(copyButton);
+        }
+        details.append(title, addressRow);
         const value = document.createElement('div');
         value.className = 'history-value';
         const amount = document.createElement('strong');
@@ -1239,8 +1258,18 @@
     });
   }
 
-  async function copy(text) {
-    try { await navigator.clipboard.writeText(text); toast('주소를 복사했습니다.'); }
+  async function copy(text, button) {
+    try {
+      await navigator.clipboard.writeText(text);
+      // Android owns its clipboard overlay; the page cannot disable it.
+      if (!/Android/i.test(navigator.userAgent)) toast('주소를 복사했습니다.');
+      else if (button) {
+        const label = button.textContent;
+        button.textContent = '✓';
+        clearTimeout(button.copyFeedbackTimer);
+        button.copyFeedbackTimer = setTimeout(() => { button.textContent = label === '✓' ? WalletI18n.translate('복사') : label; }, 1600);
+      }
+    }
     catch { toast('복사할 수 없습니다. 주소를 길게 눌러 복사해 주세요.'); }
   }
 
@@ -1587,7 +1616,7 @@
   document.querySelectorAll('[data-close]').forEach((button) => { button.onclick = () => button.closest('dialog').close(); });
   new MutationObserver(syncDialogScrollLock).observe(document.body, { attributes: true, attributeFilter: ['open'], subtree: true });
   $('copyAddress').onclick = () => copy(address());
-  $('copyAccount').onclick = () => copy(address());
+  $('copyAccount').onclick = () => copy(address(), $('copyAccount'));
   $('maxBtn').onclick = async () => {
     if (selectedAsset !== 'SL') {
       $('amount').value = formatAmountInput(formatUnits(rawBalance, token.decimal));
@@ -2042,7 +2071,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk9', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk10', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});
