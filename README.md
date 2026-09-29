@@ -1,4 +1,21 @@
-# SASEUL Sample Contracts
+# BDKoin 통합 프로젝트
+
+SASEUL 메인넷의 BDK 토큰, BDK 전용 PWA 지갑, BDK 연동 게임을 하나의 저장소에서 관리합니다.
+
+| 구성 | 소스 폴더 | 서비스 주소 |
+| --- | --- | --- |
+| BDKoin 지갑 | [BDKoin_Wallet](./BDKoin_Wallet/) | https://gaebal2.github.io/BDKoin_Wallet/ |
+| BDKoin 게임 | [BDKoin_Game](./BDKoin_Game/) | https://gaebal2.github.io/BDKoin_Game/ |
+
+게임은 현재 준비 중 페이지이며, 이후 같은 `BDKoin_Game/` 폴더에서 개발합니다.
+
+두 서비스의 원본 소스는 모두 **이 저장소**에 있습니다. `Gaebal2/gaebal2.github.io`는 요청한 서비스 주소를 제공하는 정적 파일 배포용 저장소입니다. 개발 프로젝트를 나눈 것이 아닙니다. 배포 절차는 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.
+
+토큰 발행 정보는 [BDKOIN-MAINNET.md](./BDKOIN-MAINNET.md), 지갑 실행 및 테스트 방법은 [지갑 README](./BDKoin_Wallet/README.md)에 있습니다.
+
+## 기반 SASEUL 샘플 계약 안내
+
+아래는 프로젝트의 기반이 된 SASEUL 샘플 계약 사용 설명입니다.
 
 Here is a sample contract that can be used on the SASEUL Network.
 
