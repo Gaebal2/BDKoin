@@ -25,6 +25,12 @@ const fixture = `
     wallets = [makeWallet('11'.repeat(32), '테스트 지갑', true)];
     activeWalletId = wallets[0].id;
     showWallet();
+    if (new URLSearchParams(location.search).get('scenario') === 'unlock') {
+      document.getElementById('wallet').classList.add('hidden');
+      document.getElementById('onboarding').classList.add('hidden');
+      document.getElementById('unlock').classList.remove('hidden');
+      document.getElementById('lockBtn').classList.add('hidden');
+    }
     document.querySelector('.brand strong').textContent = 'UI TEST · 가상 잔액';
   }
   startPreview();
