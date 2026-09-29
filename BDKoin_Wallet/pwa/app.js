@@ -793,7 +793,7 @@
       updateActiveBalances(balances);
       renderWalletList();
       const online = results.some(Boolean);
-      $('networkBadge').textContent = config.endpoint.toLowerCase().includes('test') ? 'TESTNET' : 'MAINNET';
+      $('networkBadge').textContent = config.endpoint.toLowerCase().includes('test') ? 'SASEUL 테스트넷' : 'SASEUL 메인넷';
       $('connectionState').className = `connection ${online ? 'online' : 'offline'}`;
       $('connectionState').innerHTML = `<i></i> ${online ? '온라인' : '연결 안 됨'}`;
       isRefreshing = false;
@@ -2042,7 +2042,7 @@
       hadController = true;
       applyUpdate();
     });
-    navigator.serviceWorker.register('./sw.js?v=bdk6', { updateViaCache: 'none' }).then(registration => {
+    navigator.serviceWorker.register('./sw.js?v=bdk7', { updateViaCache: 'none' }).then(registration => {
       const checkUpdate = () => {
         if (document.hidden) return;
         registration.update().catch(() => {});

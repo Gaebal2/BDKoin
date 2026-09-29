@@ -1,6 +1,8 @@
 /* UI-only localization. Wallet data, keys and input values are never translated. */
 globalThis.WalletI18n = (() => {
   const pairs = `
+SASEUL 메인넷|SASEUL Mainnet
+SASEUL 테스트넷|SASEUL Testnet
 상세|Details
 BDK Wallet 홈|BDK Wallet home
 주요 메뉴|Main navigation
